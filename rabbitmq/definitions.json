@@ -1,0 +1,106 @@
+{
+"vhosts": [{"name": "/"}],
+
+"users": [{
+  "name": "fretio",
+  "password":"fretio123",
+  "tags": "administrator"
+ }
+],
+
+"permissions": [{
+   "user": "fretio",
+   "vhost": "/",
+   "configure": ".*",
+   "write":".*",
+   "read": ".*"
+ }
+],
+
+"exchanges":[
+    {
+   "name": "user.events",
+   "vhost": "/", 
+   "type": "topic",
+   "durable": true,
+   "auto_delete": false
+    },
+    {
+   "name": "user.events.dlx",
+   "vhost": "/",
+   "type": "direct",
+   "durable": true,
+   "auto_delete": false
+   }
+],
+
+"queues":[
+   {
+   "name": "user.registered",
+   "vhost": "/",
+   "durable": true,
+   "auto_delete": false,
+   "arguments":
+    {
+    "x-dead-letter-exchange": "user.events.dlx",
+    "x-dead-letter-routing-key": "user.registered.dlq"
+    }
+   },
+   {
+   "name": "user.deactivated",
+   "vhost": "/",
+   "durable": true,
+   "auto_delete": false,
+   "arguments":
+    {
+    "x-dead-letter-exchange": "user.events.dlx",
+    "x-dead-letter-routing-key": "user.deactivated.dlq"
+    }
+   },
+   {
+   "name": "user.registered.dlq",
+   "vhost": "/",
+   "durable": true,
+   "auto_delete": false,
+   "arguments":{}
+   },
+   {
+   "name": "user.deactivated.dlq",
+   "vhost": "/",
+   "durable": true,
+   "auto_delete": false,
+   "arguments": {}
+  }
+],
+
+"bindings":[
+  {
+   "source": "user.events",
+   "vhost":"/",
+   "destination":"user.registered",
+   "destination_type":"queue",
+   "routing_key": "user.registered"
+  },
+  {
+   "source": "user.events",
+   "vhost": "/",
+   "destination": "user.deactivated",
+   "destination_type": "queue",
+   "routing_key": "user.deactivated"
+  },
+  {
+   "source": "user.events.dlx",
+   "vhost": "/",
+   "destination": "user.registered.dlq",
+   "destination_type": "queue",
+   "routing_key": "user.registered.dlq"
+  },
+  {
+   "source": "user.events.dlx",
+   "vhost":"/",
+   "destination": "user.deactivated.dlq",
+   "destination_type": "queue",
+   "routing_key": "user.deactivated"
+  }
+ ]
+}

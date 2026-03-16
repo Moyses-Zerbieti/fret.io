@@ -1,0 +1,56 @@
+services:
+
+  postgres:
+    image: postgres:16.13
+    container_name: fretio-postgres
+
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+
+    ports:
+      - "5433:5432"
+
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./postgres-init:/docker-entrypoint-initdb.d
+      
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U fretio"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      
+    networks:
+      - fretio-network
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: fretio-rabbitmq
+    
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS}
+
+    volumes:
+      - ./rabbitmq/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
+      - ./rabbitmq/definitions.json:/etc/rabbitmq/definitions.json
+ 
+    healthcheck:
+      test: ["CMD","rabbitmq-diagnostics", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - fretio-network
+
+volumes:
+  postgres_data:
+
+networks:
+  fretio-network:
+    driver: bridge
