@@ -60,3 +60,11 @@ Exemplos de eventos definidos:
 - match.confirmado
 
 Os serviços publicam e consomem eventos de forma desacoplada, garantindo escalabilidade e resiliência.
+
+---
+
+## 📚 Documentação
+
+A documentação completa do projeto está disponível em:
+
+👉 [Documentação Geral](./docs/documentacao-fretio.pdf)
