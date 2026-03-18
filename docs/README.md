@@ -69,3 +69,64 @@ A documentação completa do projeto está disponível em:
 
 docs/
 └── documentacao-fretio.pdf 
+
+---
+
+## 🚀 Rodando o Projeto
+
+### Pré-requisitos
+
+- [Docker](https://www.docker.com/) e Docker Compose instalados
+
+### Subindo o ambiente local
+
+Clone o repositório:
+```bash
+git clone https://github.com/Moyses-Zerbieti/fret.io.git
+cd fret.io
+```
+
+Copie o arquivo de variáveis de ambiente e preencha com os valores:
+```bash
+cp .env-template .env
+```
+
+Suba os serviços de infraestrutura:
+```bash
+docker compose up -d
+```
+
+### Serviços disponíveis
+
+| Serviço | URL | Credenciais |
+|---|---|---|
+| PostgreSQL | `localhost:5433` | definidas no `.env` |
+| RabbitMQ (AMQP) | `localhost:5672` | definidas no `.env` |
+| RabbitMQ (Painel) | `localhost:15672` | definidas no `.env` |
+
+### Acessando o painel do RabbitMQ
+
+Acesse `http://localhost:15672` no navegador e faça login com as credenciais definidas no `.env`.
+
+No painel você pode:
+- Visualizar exchanges e queues criadas
+- Publicar mensagens de teste
+- Monitorar consumers ativos
+- Inspecionar DLQs
+
+### Rodando um serviço localmente
+
+Entre na pasta do serviço desejado, copie o `.env-template` e preencha:
+```bash
+cd auth-service
+cp .env-template .env
+```
+
+Rode o serviço:
+```bash
+./mvnw spring-boot:run
+```
+
+### Migrations
+
+As migrations serão gerenciadas via Flyway — documentação será atualizada quando implementadas.
