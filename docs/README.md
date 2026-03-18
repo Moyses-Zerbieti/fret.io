@@ -67,4 +67,5 @@ Os serviços publicam e consomem eventos de forma desacoplada, garantindo escala
 
 A documentação completa do projeto está disponível em:
 
-👉 [Documentação Geral](./docs/documentacao-fretio.pdf)
+docs/
+└── documentacao-fretio.pdf
