@@ -26,10 +26,6 @@ jobs:
           distribution: 'temurin'
           cache: maven
       
-      - name: Roda testes
+      - name: Build e testes
         working-directory: ./${{ matrix.service }}
-        run: ./mvnw test
-        
-      - name: Build com Maven
-        working-directory: ./${{ matrix.service }}
-        run: ./mvnw package -DskipTests
+        run: ./mvnw clean verify  
