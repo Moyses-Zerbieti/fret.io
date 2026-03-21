@@ -4,7 +4,7 @@ Fret.io é uma plataforma backend baseada em **arquitetura de microserviços** p
 
 O sistema foi projetado com foco em **escalabilidade, desacoplamento e comunicação assíncrona**, utilizando mensageria para integração entre serviços.
 
-Atualmente, o projeto encontra-se em fase de **estruturação da infraestrutura e implementação dos microserviços**, com arquitetura e regras de negócio já definidas.
+Atualmente, o projeto encontra-se em fase de **implementação dos microserviços**, com infraestrutura provisionada, arquitetura e regras de negócio já definidas.
 
 ---
 
@@ -12,14 +12,13 @@ Atualmente, o projeto encontra-se em fase de **estruturação da infraestrutura 
 
 Em desenvolvimento
 
-Etapa atual:
+- Configuração da infraestrutura com Docker ✅
+- Definição da arquitetura de microserviços ✅
+- Modelagem completa dos bancos PostgreSQL por serviço ✅
+- Definição dos eventos e integração via RabbitMQ ✅
+- Mapeamento das entidades JPA do auth-service ✅
 
-- Configuração da infraestrutura com Docker
-- Definição da arquitetura de microserviços
-- Modelagem completa dos bancos PostgreSQL por serviço
-- Definição dos eventos e integração via RabbitMQ
-
-Próximos passos:
+### Etapa atual:
 
 - Implementação do Auth Service
 - Publicação e consumo de eventos
@@ -76,7 +75,7 @@ docs/
 
 ### Pré-requisitos
 
-- [Docker](https://www.docker.com/) e Docker Compose instalados
+- [Docker](https://www.docker.com/) instalado (Docker Compose já incluído) 
 
 ### Subindo o ambiente local
 
@@ -126,7 +125,31 @@ Rode o serviço:
 ```bash
 ./mvnw spring-boot:run
 ```
+---
 
 ### Migrations
 
-As migrations serão gerenciadas via Flyway — documentação será atualizada quando implementadas.
+As migrations são gerenciadas pelo **Flyway** e executadas automaticamente ao subir cada serviço.
+
+Os arquivos ficam em `src/main/resources/db/migration/` de cada serviço, nomeados no padrão `V{versão}__{descrição}.sql`.
+
+#### auth-service
+| Versão | Descrição |
+|--------|-----------|
+| V1 | Criação da tabela `users` |
+| V2 | Criação da tabela `user_roles` |
+| V3 | Criação da tabela `refresh_tokens` |
+| V4 | Criação da tabela `password_resets` |
+
+> Para habilitar o Flyway no serviço, adicione as dependências no `pom.xml`:
+> 
+> ```xml
+> <dependency>
+>     <groupId>org.flywaydb</groupId>
+>     <artifactId>flyway-core</artifactId>
+> </dependency>
+> <dependency>
+>     <groupId>org.flywaydb</groupId>
+>     <artifactId>flyway-database-postgresql</artifactId>
+> </dependency>
+> ```
