@@ -1,6 +1,6 @@
 package com.fret.io.auth_service.model;
 
-public enum UserRole {
+public enum Role {
 
     EMBARCADORA,
     MOTORISTA

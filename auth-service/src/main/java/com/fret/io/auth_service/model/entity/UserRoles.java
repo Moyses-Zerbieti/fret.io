@@ -1,7 +1,7 @@
 package com.fret.io.auth_service.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fret.io.auth_service.model.UserRole;
+import com.fret.io.auth_service.model.Role;
 import jakarta.persistence.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -23,8 +23,8 @@ public class UserRoles {
     private User userId;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "user_role", length = 30, nullable = false )
-    private UserRole role;
+    @Column(name = "role", length = 30, nullable = false )
+    private Role role;
 
 
     @CreatedDate
@@ -48,11 +48,11 @@ public class UserRoles {
         this.userId = userId;
     }
 
-    public UserRole getRole() {
+    public Role getRole() {
         return role;
     }
 
-    public void setRole(UserRole role) {
+    public void setRole(Role role) {
         this.role = role;
     }
 
