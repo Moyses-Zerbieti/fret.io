@@ -1,7 +1,6 @@
-package com.fret.io.auth_service.model.entity;
+package com.fret.io.auth_service.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fret.io.auth_service.model.Role;
 import jakarta.persistence.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;

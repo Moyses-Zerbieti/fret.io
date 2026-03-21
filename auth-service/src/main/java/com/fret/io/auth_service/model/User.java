@@ -1,8 +1,6 @@
-package com.fret.io.auth_service.model.entity;
+package com.fret.io.auth_service.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fret.io.auth_service.model.DocumentType;
-import com.fret.io.auth_service.model.UserStatus;
 import jakarta.persistence.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
