@@ -31,6 +31,9 @@ public class UserRoles {
     @Column(name = "granted_at")
     private LocalDateTime grantedAt;
 
+    public UserRoles() {
+    }
+
     public UUID getId() {
         return id;
     }
