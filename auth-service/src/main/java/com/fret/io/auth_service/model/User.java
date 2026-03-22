@@ -45,6 +45,14 @@ public class User {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    public User() {
+    }
+
+    public User(String document, String email){
+        this.document = document;
+        this.email = email;
+    }
+
     public UUID getId() {
         return id;
     }
