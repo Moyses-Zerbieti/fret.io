@@ -57,6 +57,6 @@ public class UserService {
     }
 
     private boolean isValidCNPJ(String doc){
-        return doc.matches("\\d{2}\\.\\d{3}\\.d{3}/\\d{4}\\-\\d{2}");
+        return doc.matches("\\d{2}\\.\\d{3}\\.d{3}/\\d{4}-\\d{2}");
     }
 }
