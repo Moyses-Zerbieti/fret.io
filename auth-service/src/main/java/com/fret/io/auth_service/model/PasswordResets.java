@@ -18,21 +18,21 @@ public class PasswordResets {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User userId;
+    private User user;
 
     @Column(name = "token_hash", nullable = false, unique = true, columnDefinition = "TEXT")
     private String tokenHash;
 
-    @JsonFormat(pattern = "dd/mm/yyyy HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-mm-dd HH:mm:ss")
     @Column(name = "expires_at")
     private LocalDateTime expiresAt;
 
-    @JsonFormat(pattern = "dd/mm/yyyy HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-mm-dd HH:mm:ss")
     @Column(name = "used_at")
     private LocalDateTime usedAt;
 
     @CreatedDate
-    @JsonFormat(pattern = "dd/mm/yyyy HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-mm-dd HH:mm:ss")
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
@@ -44,12 +44,12 @@ public class PasswordResets {
         this.id = id;
     }
 
-    public User getUserId() {
-        return userId;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserId(User userId) {
-        this.userId = userId;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public String getTokenHash() {

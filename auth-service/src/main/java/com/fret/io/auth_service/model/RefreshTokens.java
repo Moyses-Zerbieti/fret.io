@@ -19,7 +19,7 @@ public class RefreshTokens {
 
    @ManyToOne
    @JoinColumn(name = "user_id")
-   private User userId;
+   private User user;
 
    @Column(name = "token_hash", nullable = false, unique = true, columnDefinition = "TEXT")
    private String tokenHash;
@@ -27,17 +27,16 @@ public class RefreshTokens {
    @Column(name = "device_info", nullable = false, columnDefinition = "TEXT")
    private String deviceInfo;
 
-
-   @JsonFormat(pattern = "dd/mm/yyyy HH:mm:ss")
+   @JsonFormat(pattern = "yyyy-mm-dd HH:mm:ss")
    @Column(name = "expires_at")
    private LocalDateTime expiresAt;
 
-   @JsonFormat(pattern = "dd/mm/yyyy HH:mm:ss")
+   @JsonFormat(pattern = "yyyy-mm-dd HH:mm:ss")
    @Column(name = "revoked_at")
    private LocalDateTime revokedAt;
 
    @CreatedDate
-   @JsonFormat(pattern = "dd/mm/yyyy HH:mm:ss")
+   @JsonFormat(pattern = "yyyy-mm-dd HH:mm:ss")
    @Column(name = "created_at")
    private LocalDateTime createdAt;
 
@@ -49,12 +48,12 @@ public class RefreshTokens {
       this.id = id;
    }
 
-   public User getUserId() {
-      return userId;
+   public User getUser() {
+      return user;
    }
 
-   public void setUserId(User userId) {
-      this.userId = userId;
+   public void setUser(User user) {
+      this.user = user;
    }
 
    public String getTokenHash() {
@@ -96,4 +95,5 @@ public class RefreshTokens {
    public void setCreatedAt(LocalDateTime createdAt) {
       this.createdAt = createdAt;
    }
+
 }
