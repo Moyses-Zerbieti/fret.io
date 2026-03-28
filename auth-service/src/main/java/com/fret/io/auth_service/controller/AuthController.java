@@ -1,0 +1,58 @@
+package com.fret.io.auth_service.controller;
+
+import com.fret.io.auth_service.dto.AuthResponse;
+import com.fret.io.auth_service.dto.LoginRequest;
+import com.fret.io.auth_service.dto.RefreshRequest;
+import com.fret.io.auth_service.dto.RegisterRequest;
+import com.fret.io.auth_service.exception.DocInvalidException;
+import com.fret.io.auth_service.service.AuthService;
+import com.fret.io.auth_service.service.RefreshTokenService;
+import com.fret.io.auth_service.service.UserService;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("auth")
+public class AuthController {
+
+    private final UserService userService;
+    private final AuthService authService;
+    private final RefreshTokenService refreshTokenService;
+
+    public AuthController(UserService service, AuthService authService, RefreshTokenService refreshTokenService){
+        this.userService = service;
+        this.authService = authService;
+        this.refreshTokenService = refreshTokenService;
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<?>registeredUser(@Valid @RequestBody RegisterRequest request){
+        try{
+            userService.registerUser(request);
+            return ResponseEntity.status(HttpStatus.CREATED).build();
+
+        }catch (DocInvalidException e){
+          return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<AuthResponse> login(@RequestBody @Valid LoginRequest loginRequest){
+            AuthResponse response = authService.login(loginRequest);
+            return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<AuthResponse> refresh(@RequestBody RefreshRequest request){
+
+        AuthResponse response = refreshTokenService.refresh(
+                request.getRefreshToken()
+        );
+        return ResponseEntity.ok(response);
+    }
+}

@@ -32,15 +32,19 @@ public class User {
     private String passwordHash;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "role", nullable = false)
+    private Role role;
+
+    @Enumerated(EnumType.STRING)
     @Column(name = "user_status", length = 20, nullable = false)
     private UserStatus userStatus;
 
     @CreatedDate
-    @JsonFormat(pattern = "dd/mm/yyyy HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-mm-dd HH:mm:ss")
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    @JsonFormat(pattern = "dd/mm/yyyy HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-mm-dd HH:mm:ss")
     @LastModifiedDate
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
@@ -93,6 +97,14 @@ public class User {
         this.passwordHash = passwordHash;
     }
 
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
     public UserStatus getUserStatus() {
         return userStatus;
     }
@@ -116,4 +128,5 @@ public class User {
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
+
 }
