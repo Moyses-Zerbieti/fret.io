@@ -1,19 +1,15 @@
 package com.fret.io.auth_service;
 
-import com.fret.io.auth_service.service.EmailService;
+import com.fret.io.auth_service.config.TestMailConfig;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.mail.javamail.JavaMailSender;
 
 @SpringBootTest
+@org.springframework.test.context.ActiveProfiles("test")
+@org.springframework.context.annotation.Import(TestMailConfig.class)
 class AuthServiceApplicationTests {
 
-    @Test
+	@Test
 	void contextLoads() {
 	}
-
 }
