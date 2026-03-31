@@ -57,8 +57,14 @@ public class AuthController {
     }
 
     @PostMapping("/forgot-password")
-    public ResponseEntity<Void> forgotPassword(@RequestBody @Valid PasswordResetRequest request){
+    public ResponseEntity<Void> forgotPassword(@RequestBody @Valid ForgotPasswordRequest request){
         passwordResetService.forgotPassword(request.getEmail());
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<String> resetPassword(@RequestBody ResetPasswordRequest request){
+        passwordResetService.resetPassword(request);
+        return ResponseEntity.ok("Senha redefinida com sucesso");
     }
 }

@@ -2,7 +2,7 @@ package com.fret.io.auth_service.dto;
 
 import jakarta.validation.constraints.Email;
 
-public class PasswordResetRequest {
+public class ForgotPasswordRequest {
 
     @Email
     private String email;
