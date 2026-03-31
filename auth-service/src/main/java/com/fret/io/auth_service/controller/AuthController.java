@@ -1,11 +1,9 @@
 package com.fret.io.auth_service.controller;
 
-import com.fret.io.auth_service.dto.AuthResponse;
-import com.fret.io.auth_service.dto.LoginRequest;
-import com.fret.io.auth_service.dto.RefreshRequest;
-import com.fret.io.auth_service.dto.RegisterRequest;
+import com.fret.io.auth_service.dto.*;
 import com.fret.io.auth_service.exception.DocInvalidException;
 import com.fret.io.auth_service.service.AuthService;
+import com.fret.io.auth_service.service.PasswordResetService;
 import com.fret.io.auth_service.service.RefreshTokenService;
 import com.fret.io.auth_service.service.UserService;
 import jakarta.validation.Valid;
@@ -23,11 +21,13 @@ public class AuthController {
     private final UserService userService;
     private final AuthService authService;
     private final RefreshTokenService refreshTokenService;
+    private final PasswordResetService passwordResetService;
 
-    public AuthController(UserService service, AuthService authService, RefreshTokenService refreshTokenService){
+    public AuthController(UserService service, AuthService authService, RefreshTokenService refreshTokenService, PasswordResetService passwordResetService){
         this.userService = service;
         this.authService = authService;
         this.refreshTokenService = refreshTokenService;
+        this.passwordResetService = passwordResetService;
     }
 
     @PostMapping("/register")
@@ -54,5 +54,11 @@ public class AuthController {
                 request.getRefreshToken()
         );
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/forgot-password")
+    public ResponseEntity<Void> forgotPassword(@RequestBody @Valid PasswordResetRequest request){
+        passwordResetService.forgotPassword(request.getEmail());
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }
