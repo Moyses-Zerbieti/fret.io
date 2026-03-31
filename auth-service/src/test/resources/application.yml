@@ -12,3 +12,10 @@ spring:
       hibernate:
         temp:
           use_jdbc_metadatas_default: false
+  mail:
+    host: localhost
+    port: 1025
+
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.mail.MailSenderAutoConfiguration
