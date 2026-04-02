@@ -1,17 +1,11 @@
 package com.fret.io.auth_service.dto;
 
+import jakarta.validation.constraints.NotBlank;
+
 public class ResetPasswordRequest {
 
-    private String rawToken;
+    @NotBlank (message = "Este campo é obrigatório não deve ficar em branco")
     private String newPassword;
-
-    public String getRawToken() {
-        return rawToken;
-    }
-
-    public void setRawToken(String rawToken) {
-        this.rawToken = rawToken;
-    }
 
     public String getNewPassword() {
         return newPassword;

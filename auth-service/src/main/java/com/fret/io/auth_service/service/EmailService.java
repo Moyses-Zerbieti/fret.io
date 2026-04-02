@@ -13,13 +13,17 @@ public class EmailService {
         this.mailSender = mailSender;
     }
 
-    public void sendPasswordReset (String forTo, String hash){
+    public void sendPasswordReset (String forTo, String linkResetPassword){
 
+        String resetLink = "http://localhost:8080/auth/reset-password/" + linkResetPassword;
 
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(forTo);
         message.setSubject("Redefinição de senha");
-        message.setText("Código para redefinir sua senha: " + hash);
+        message.setText("Clique no link abaixo para redefinir sua senha:\n" +
+                resetLink + "\n\n" +
+                "O link expira em 1 hora"
+        );
 
         mailSender.send(message);
     }

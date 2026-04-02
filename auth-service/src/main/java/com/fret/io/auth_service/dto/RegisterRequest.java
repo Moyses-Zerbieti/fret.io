@@ -6,13 +6,14 @@ import jakarta.validation.constraints.NotBlank;
 
 public class RegisterRequest {
 
-    @NotBlank
+    @NotBlank (message = "É necessário número do documento para se registrar")
     private String document;
 
+    @NotBlank(message = "É necessário email para se registrar")
     @Email
     private String email;
 
-    @NotBlank
+    @NotBlank (message = "É necessário criar uma senha para se registrar")
     private String password;
 
     public User toModel(){
