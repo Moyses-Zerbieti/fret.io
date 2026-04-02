@@ -1,5 +1,6 @@
 package com.fret.io.auth_service.service;
 
+import com.fret.io.auth_service.config.PasswordValidator;
 import com.fret.io.auth_service.dto.LoginRequest;
 import com.fret.io.auth_service.dto.RegisterRequest;
 import com.fret.io.auth_service.exception.DocInvalidException;
@@ -13,18 +14,22 @@ public class UserService {
 
     private final UserRepository repository;
     private final PasswordEncoder encoder;
+    private final PasswordValidator validator;
 
 
     public UserService (UserRepository repository,
-                        PasswordEncoder encoder){
+                        PasswordEncoder encoder, PasswordValidator validator){
         this.repository = repository;
         this.encoder = encoder;
+        this.validator = validator;
     }
 
 
 
     public User registerUser(RegisterRequest userDto){
             String docNumbers = userDto.getDocument();
+            validator.validatePassword(userDto.getPassword());
+
             User user = userDto.toModel();
 
             if (docNumbers.length() == 14) {

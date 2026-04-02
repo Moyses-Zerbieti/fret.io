@@ -9,13 +9,10 @@ import com.fret.io.auth_service.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("auth")
+@RequestMapping("/auth")
 public class AuthController {
 
     private final UserService userService;
@@ -32,13 +29,8 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<?>registeredUser(@Valid @RequestBody RegisterRequest request){
-        try{
             userService.registerUser(request);
             return ResponseEntity.status(HttpStatus.CREATED).build();
-
-        }catch (DocInvalidException e){
-          return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
     }
 
     @PostMapping("/login")
@@ -62,9 +54,11 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @PostMapping("/reset-password")
-    public ResponseEntity<String> resetPassword(@RequestBody ResetPasswordRequest request){
-        passwordResetService.resetPassword(request);
+    @PostMapping("/reset-password/{token}")
+    public ResponseEntity<String> resetPassword(
+            @PathVariable String token, @RequestBody ResetPasswordRequest request){
+
+        passwordResetService.resetPassword(token,request);
         return ResponseEntity.ok("Senha redefinida com sucesso");
     }
 }
