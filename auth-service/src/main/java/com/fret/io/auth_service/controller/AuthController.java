@@ -1,7 +1,6 @@
 package com.fret.io.auth_service.controller;
 
 import com.fret.io.auth_service.dto.*;
-import com.fret.io.auth_service.exception.DocInvalidException;
 import com.fret.io.auth_service.service.AuthService;
 import com.fret.io.auth_service.service.PasswordResetService;
 import com.fret.io.auth_service.service.RefreshTokenService;
@@ -10,6 +9,8 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/auth")
@@ -60,5 +61,14 @@ public class AuthController {
 
         passwordResetService.resetPassword(token,request);
         return ResponseEntity.ok("Senha redefinida com sucesso");
+    }
+
+    @PatchMapping("/status/{id}")
+    public ResponseEntity<Void> updateUserStatus(
+            @PathVariable UUID id,
+            @Valid @RequestBody UpdateUserStatusRequest request){
+        userService.updateStatusUser( id,request.getUserStatus());
+        return ResponseEntity.noContent().build();
+
     }
 }
