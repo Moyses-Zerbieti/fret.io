@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface RefreshTokenRepository extends JpaRepository<RefreshTokens, UUID> {
@@ -19,4 +20,6 @@ public interface RefreshTokenRepository extends JpaRepository<RefreshTokens, UUI
             AND t.revokedAt IS NULL
             """)
     void revokeAllByUserId(UUID userId);
+
+    List<RefreshTokens> findByUserIdAndRevokedAtIsNull(UUID userId);
 }
