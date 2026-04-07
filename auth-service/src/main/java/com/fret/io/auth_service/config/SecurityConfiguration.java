@@ -54,8 +54,10 @@ public class SecurityConfiguration {
                         .requestMatchers(
                                 "/auth/register",
                                 "/auth/login",
+                                "/auth/refresh",
                                 "/auth/forgot-password",
-                                "/auth/reset-password/**"
+                                "/auth/reset-password/**",
+                                "/auth/status/**"
                                 ).permitAll()
                         .anyRequest().authenticated()
                 )

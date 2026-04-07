@@ -2,7 +2,10 @@ package com.fret.io.auth_service.common;
 
 import com.fret.io.auth_service.exception.DocInvalidException;
 import com.fret.io.auth_service.exception.PasswordInvalidException;
+import com.fret.io.auth_service.exception.UserInactiveException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -48,5 +51,12 @@ public class GlobalExceptionHandler {
         response.put("errors", exception.getErrors());
 
         return ResponseEntity.badRequest().body(response);
+    }
+
+    @ExceptionHandler(UserInactiveException.class)
+    public ResponseEntity<?> userInactiveException(UserInactiveException exception){
+        return ResponseEntity
+                .status(HttpStatus.FORBIDDEN)
+                .body(exception.getMessage());
     }
 }

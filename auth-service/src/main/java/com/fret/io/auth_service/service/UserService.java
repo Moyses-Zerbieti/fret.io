@@ -4,10 +4,18 @@ import com.fret.io.auth_service.config.PasswordValidator;
 import com.fret.io.auth_service.dto.LoginRequest;
 import com.fret.io.auth_service.dto.RegisterRequest;
 import com.fret.io.auth_service.exception.DocInvalidException;
+import com.fret.io.auth_service.exception.UserInactiveException;
 import com.fret.io.auth_service.model.*;
+import com.fret.io.auth_service.repository.RefreshTokenRepository;
 import com.fret.io.auth_service.repository.UserRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Service
 public class UserService {
@@ -15,13 +23,17 @@ public class UserService {
     private final UserRepository repository;
     private final PasswordEncoder encoder;
     private final PasswordValidator validator;
+    private final UserEventPublisher eventPublisher;
+    private final RefreshTokenRepository refreshTokenRepository;
 
 
     public UserService (UserRepository repository,
-                        PasswordEncoder encoder, PasswordValidator validator){
+                        PasswordEncoder encoder, PasswordValidator validator, UserEventPublisher eventPublisher, RefreshTokenRepository refreshTokenRepository){
         this.repository = repository;
         this.encoder = encoder;
         this.validator = validator;
+        this.eventPublisher = eventPublisher;
+        this.refreshTokenRepository = refreshTokenRepository;
     }
 
 
@@ -62,9 +74,36 @@ public class UserService {
     public User loginUser(LoginRequest loginRequest){
         User user = repository.findByEmail(loginRequest.getEmail())
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        if (user.getUserStatus() == UserStatus.SUSPENDED ||
+        user.getUserStatus() == UserStatus.BLOCKED){
+            throw new UserInactiveException();
+        }
+
         if (!encoder.matches(loginRequest.getPassword(), user.getPasswordHash())){
             throw  new RuntimeException("Senha inválida");
         }
         return user;
     }
+
+    @Transactional
+    public void updateStatusUser(UUID userId, UserStatus status){
+        User user = repository.findById(userId)
+                .orElseThrow(()-> new RuntimeException("Usuário não encontrado"));
+
+        user.setUserStatus(status);
+        user.setUpdatedAt(LocalDateTime.now());
+
+        repository.save(user);
+        refreshTokenRepository.revokeAllByUserId(userId);
+
+        if (status == UserStatus.SUSPENDED || status == UserStatus.BLOCKED){
+            eventPublisher.publishUserDeactivated(
+                    user.getId(),
+                    status.name()
+            );
+        }
+    }
+
+
 }
