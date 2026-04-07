@@ -1,5 +1,7 @@
 package com.fret.io.auth_service.service;
 
+import com.fret.io.auth_service.dto.UserRegisteredEvent;
+import com.fret.io.auth_service.model.User;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +28,21 @@ public class UserEventPublisher {
         rabbitTemplate.convertAndSend(
                 "user.events",
                 "user.deactivated",
+                event
+        );
+    }
+
+    public void publishUserRegistered(User user){
+        UserRegisteredEvent event = new UserRegisteredEvent(
+                    user.getId(),
+                    user.getEmail(),
+                    user.getDocumentType(),
+                    user.getDocument()
+        );
+
+        rabbitTemplate.convertAndSend(
+                "user.events",
+                "user.registered",
                 event
         );
     }

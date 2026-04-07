@@ -36,8 +36,7 @@ public class UserService {
         this.refreshTokenRepository = refreshTokenRepository;
     }
 
-
-
+    @Transactional
     public User registerUser(RegisterRequest userDto){
             String docNumbers = userDto.getDocument();
             validator.validatePassword(userDto.getPassword());
@@ -60,7 +59,16 @@ public class UserService {
             user.setUserStatus(UserStatus.ACTIVE);
             user.setPasswordHash(encoder.encode(userDto.getPassword()));
 
-            return repository.save(user);
+            User savedUser = repository.save(user);
+
+            try{
+                eventPublisher.publishUserRegistered(savedUser);
+            }catch (Exception e){
+                System.out.println("Erro ao publicar evento user.registered: " + e.getMessage());
+            }
+
+
+            return savedUser;
     }
 
     private boolean isValidCPF(String doc){
