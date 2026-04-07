@@ -8,6 +8,7 @@ import com.fret.io.auth_service.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -70,5 +71,14 @@ public class AuthController {
         userService.updateStatusUser( id,request.getUserStatus());
         return ResponseEntity.noContent().build();
 
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(Authentication authentication){
+        String userId = authentication.getName();
+
+        authService.logout(UUID.fromString(userId));
+
+        return ResponseEntity.ok().build();
     }
 }
