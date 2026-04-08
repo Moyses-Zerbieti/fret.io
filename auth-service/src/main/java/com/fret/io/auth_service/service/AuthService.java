@@ -30,8 +30,12 @@ public class AuthService {
         this.refreshTokenRepository = refreshTokenRepository;
     }
 
+    @Transactional
     public AuthResponse login(LoginRequest loginRequest){
         User user = userService.loginUser(loginRequest);
+
+        refreshTokenRepository.revokeAllByUserId(user.getId());
+
         String acessToken = jwtService.generateToken(user);
         String refreshToken  = refreshTokenService.generateRefreshToken(user, "Postman");
 
