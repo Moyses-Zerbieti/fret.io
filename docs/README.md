@@ -12,24 +12,24 @@ Atualmente, o projeto encontra-se em fase de **implementação dos microserviço
 
 Em desenvolvimento
 
-- Configuração da infraestrutura com Docker ✅
-- Definição da arquitetura de microserviços ✅
-- Modelagem completa dos bancos PostgreSQL por serviço ✅
-- Definição dos eventos e integração via RabbitMQ ✅
-- Mapeamento das entidades JPA do auth-service ✅
+Atualmente, o projeto está na fase de evolução do API Gateway e implementação de funcionalidades centrais da plataforma.
 
 ### Etapa atual:
 
-- Implementação do Auth Service
-- Publicação e consumo de eventos
-- Orquestração entre serviços
+- Setup incial da API Gateway
+- Configuração de rotas para os microserviços
+- Filtro de autenticação JWT no Gateway
+- Configuração de CORS global
+- Rate limiting por IP
+- Logging e tracing de requisições
 
 ---
 
 ## 🏗️ Arquitetura
 
-O sistema é composto por **5 microserviços independentes**, cada um com seu próprio banco de dados PostgreSQL.
+O sistema é composto por **6 microserviços independentes**, cada um com seu próprio banco de dados PostgreSQL.
 
+- Api Gateway
 - Auth Service
 - Company Service
 - Driver Service
@@ -44,6 +44,24 @@ O sistema é composto por **5 microserviços independentes**, cada um com seu pr
 - Arquitetura orientada a eventos (Event-Driven)
 
 Nenhum serviço acessa diretamente o banco de outro.
+
+---
+
+## 🌐 API Gateway
+
+A `api-gateway` atua como ponto de entrada único da aplicação, sendo responsável por rotear as requisições para os serviços internos.
+
+### Porta
+
+* `8080`
+
+### Exemplo de rotas
+
+| Rota          | Serviço        |
+| ------------- | -------------- |
+| `/auth/**`    | auth-service   |
+| `/drivers/**` | driver-service |
+| `/cargo/**`   | cargo-service  |
 
 ---
 
@@ -95,7 +113,7 @@ Suba os serviços de infraestrutura:
 docker compose up -d
 ```
 
-### Serviços disponíveis
+### 🧩 Serviços disponíveis
 
 | Serviço | URL | Credenciais |
 |---|---|---|
@@ -103,7 +121,7 @@ docker compose up -d
 | RabbitMQ (AMQP) | `localhost:5672` | definidas no `.env` |
 | RabbitMQ (Painel) | `localhost:15672` | definidas no `.env` |
 
-### Acessando o painel do RabbitMQ
+### 📊 RabbitMQ
 
 Acesse `http://localhost:15672` no navegador e faça login com as credenciais definidas no `.env`.
 
@@ -113,7 +131,7 @@ No painel você pode:
 - Monitorar consumers ativos
 - Inspecionar DLQs
 
-### Rodando um serviço localmente
+### ▶️ Rodando um serviço localmente
 
 Entre na pasta do serviço desejado, copie o `.env-template` e preencha:
 ```bash
@@ -127,7 +145,7 @@ Rode o serviço:
 ```
 ---
 
-### Migrations
+### 🗃️ Migrations
 
 As migrations são gerenciadas pelo **Flyway** e executadas automaticamente ao subir cada serviço.
 
