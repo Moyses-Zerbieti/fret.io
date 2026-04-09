@@ -52,12 +52,12 @@ public class SecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(
-                                "/auth/register",
-                                "/auth/login",
-                                "/auth/refresh",
-                                "/auth/forgot-password",
-                                "/auth/reset-password/**",
-                                "/auth/status/**"
+                                "/register",
+                                "/login",
+                                "/refresh",
+                                "/forgot-password",
+                                "/reset-password/**",
+                                "/status/**"
                                 ).permitAll()
                         .anyRequest().authenticated()
                 )
