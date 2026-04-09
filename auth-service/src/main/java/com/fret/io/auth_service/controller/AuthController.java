@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/auth")
 public class AuthController {
 
     private final UserService userService;
