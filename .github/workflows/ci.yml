@@ -12,7 +12,7 @@ jobs:
     
     strategy:
       matrix:
-        service: [auth-service, company-service, driver-service, cargo-service, matching-service]
+        service: [auth-service, company-service, driver-service, cargo-service, matching-service, api-gateway]
         
     steps:
       - name: Checkout código
@@ -28,4 +28,4 @@ jobs:
       
       - name: Build e testes
         working-directory: ./${{ matrix.service }}
-        run: ./mvnw clean verify  
+        run: ./mvnw clean verify

@@ -12,7 +12,7 @@
 	<artifactId>auth-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>auth-service</name>
-	<description>Authentication and authorization service for Fret.io </description>
+	<description>Autenticação e autoricação da plataforma FretIO </description>
 	<url/>
 	<licenses>
 		<license/>
