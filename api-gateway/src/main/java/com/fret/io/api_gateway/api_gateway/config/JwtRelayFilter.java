@@ -27,12 +27,12 @@ public class JwtRelayFilter implements GlobalFilter, Ordered {
                     Jwt jwt = auth.getToken();
 
                     String userId = jwt.getSubject();
-                    String role   = jwt.getClaimAsString("role");
+                    String role = jwt.getClaimAsString("role");
 
                     ServerHttpRequest mutatedRequest = exchange.getRequest()
                             .mutate()
-                            .header("X-User-Id",   userId != null ? userId : "")
-                            .header("X-User-Role", role   != null ? role   : "")
+                            .header("X-User-Id", userId != null ? userId : "")
+                            .header("X-User-Role", role != null ? role : "")
                             .build();
 
                     return chain.filter(
