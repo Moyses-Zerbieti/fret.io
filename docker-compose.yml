@@ -16,13 +16,14 @@ services:
       - ./postgres-init:/docker-entrypoint-initdb.d
       
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U fretio"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
       interval: 10s
       timeout: 5s
       retries: 5
       
     networks:
       - fretio-network
+      
 
   rabbitmq:
     image: rabbitmq:3-management
@@ -47,9 +48,32 @@ services:
       - "15672:15672"
     networks:
       - fretio-network
+      
 
+  redis:
+    image: redis:7
+    container_name: fretio-redis
+    
+    command: ["redis-server", "--appendonly", "yes"]
+    
+    volumes:
+      - redis_data:/data
+      
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      
+    ports:
+      - "6379:6379"
+      
+    networks:
+      - fretio-network
+        
 volumes:
   postgres_data:
+  redis_data:
 
 networks:
   fretio-network:
