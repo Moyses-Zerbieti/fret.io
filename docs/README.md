@@ -12,16 +12,9 @@ Atualmente, o projeto encontra-se em fase de **implementação dos microserviço
 
 Em desenvolvimento
 
-Atualmente, o projeto está na fase de evolução do API Gateway e implementação de funcionalidades centrais da plataforma.
-
 ### Etapa atual:
 
-- Setup incial da API Gateway
-- Configuração de rotas para os microserviços
-- Filtro de autenticação JWT no Gateway
-- Configuração de CORS global
-- Rate limiting por IP
-- Logging e tracing de requisições
+- Implementação de testes unitários no Auth Service
 
 ---
 
