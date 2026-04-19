@@ -67,16 +67,7 @@ public class UserService {
                 System.out.println("Erro ao publicar evento user.registered: " + e.getMessage());
             }
 
-
             return savedUser;
-    }
-
-    private boolean isValidCPF(String doc){
-        return doc.matches("\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}");
-    }
-
-    private boolean isValidCNPJ(String doc){
-        return doc.matches("\\d{2}\\.\\d{3}\\.\\d{3}/\\d{4}-\\d{2}");
     }
 
     public User loginUser(LoginRequest loginRequest){
@@ -113,5 +104,12 @@ public class UserService {
         }
     }
 
+    private boolean isValidCPF(String doc){
+        return doc.matches("\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}");
+    }
+
+    private boolean isValidCNPJ(String doc){
+        return doc.matches("\\d{2}\\.\\d{3}\\.\\d{3}/\\d{4}-\\d{2}");
+    }
 
 }

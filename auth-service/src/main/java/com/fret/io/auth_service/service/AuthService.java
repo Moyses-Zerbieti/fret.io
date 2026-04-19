@@ -2,7 +2,6 @@ package com.fret.io.auth_service.service;
 
 import com.fret.io.auth_service.dto.AuthResponse;
 import com.fret.io.auth_service.dto.LoginRequest;
-import com.fret.io.auth_service.dto.RefreshRequest;
 import com.fret.io.auth_service.model.RefreshTokens;
 import com.fret.io.auth_service.model.User;
 import com.fret.io.auth_service.repository.RefreshTokenRepository;
