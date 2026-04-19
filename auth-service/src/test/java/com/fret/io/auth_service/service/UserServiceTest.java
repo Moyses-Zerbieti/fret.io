@@ -177,7 +177,7 @@ public class UserServiceTest {
     }
 
     @Test
-    void loginWithPasswordInvalidExeption(){
+    void loginWithPasswordInvalidException(){
         LoginRequest loginRequest = new LoginRequest();
         loginRequest.setEmail("test@gmail.com");
         loginRequest.setPassword("123456");
