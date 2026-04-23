@@ -2,6 +2,7 @@ package com.fret.io.auth_service.service;
 
 import com.fret.io.auth_service.dto.AuthResponse;
 import com.fret.io.auth_service.dto.LoginRequest;
+import com.fret.io.auth_service.model.RefreshTokens;
 import com.fret.io.auth_service.model.User;
 import com.fret.io.auth_service.repository.RefreshTokenRepository;
 import org.junit.jupiter.api.Test;
@@ -10,6 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -32,7 +34,7 @@ public class AuthServiceTest {
 
 
     @Test
-    void loginSucessTest(){
+    void loginSucessTest() {
         LoginRequest loginRequest = new LoginRequest();
         loginRequest.setEmail("test@gmail.com");
         loginRequest.setPassword("123456");
@@ -49,7 +51,7 @@ public class AuthServiceTest {
 
         when(userService.loginUser(loginRequest)).thenReturn(user);
         when(jwtService.generateToken(user)).thenReturn(accessToken);
-        when(refreshTokenService.generateRefreshToken(user,"Postman"))
+        when(refreshTokenService.generateRefreshToken(user, "Postman"))
                 .thenReturn(refreshToken);
 
         AuthResponse response = authService.login(loginRequest);
@@ -66,7 +68,7 @@ public class AuthServiceTest {
 
 
     @Test
-    void loginWithInvalidCredentialsTest(){
+    void loginWithInvalidCredentialsTest() {
         LoginRequest request = new LoginRequest();
         request.setEmail("test@gmail.com");
         request.setPassword("123456");
@@ -78,7 +80,7 @@ public class AuthServiceTest {
         when(userService.loginUser(request))
                 .thenThrow(new RuntimeException("Invalid Credentials"));
 
-        assertThrows(RuntimeException.class, () ->{
+        assertThrows(RuntimeException.class, () -> {
             authService.login(request);
         });
 
@@ -88,7 +90,7 @@ public class AuthServiceTest {
     }
 
     @Test
-    void loginGenerateAccessTokenFailTest(){
+    void loginGenerateAccessTokenFailTest() {
         LoginRequest request = new LoginRequest();
         request.setEmail("test@gmail.com");
         request.setPassword("123456");
@@ -108,8 +110,8 @@ public class AuthServiceTest {
         when(jwtService.generateToken(user))
                 .thenThrow(new RuntimeException("Error to generate your token"));
 
-        assertThrows(RuntimeException.class, ()->{
-           authService.login(request);
+        assertThrows(RuntimeException.class, () -> {
+            authService.login(request);
         });
 
         verify(userService).loginUser(request);
@@ -118,7 +120,7 @@ public class AuthServiceTest {
     }
 
     @Test
-    void loginGenerateRefreshTokenFailTest(){
+    void loginGenerateRefreshTokenFailTest() {
         LoginRequest loginRequest = new LoginRequest();
         loginRequest.setEmail("test@gmail.com");
         loginRequest.setPassword("123456");
@@ -139,10 +141,10 @@ public class AuthServiceTest {
                 .thenReturn("access-token");
 
         when(refreshTokenService.generateRefreshToken(user, "Postman"))
-                .thenThrow(new RuntimeException ("Error to generate your refresh token"));
+                .thenThrow(new RuntimeException("Error to generate your refresh token"));
 
-        assertThrows(RuntimeException.class, ()->{
-           authService.login(loginRequest);
+        assertThrows(RuntimeException.class, () -> {
+            authService.login(loginRequest);
         });
 
         verify(userService).loginUser(loginRequest);
@@ -150,5 +152,48 @@ public class AuthServiceTest {
         verify(jwtService).generateToken(user);
         verify(refreshTokenService).generateRefreshToken(user, "Postman");
 
+    }
+
+    @Test
+    void logoutSuccess() {
+        UUID userId = UUID.randomUUID();
+        RefreshTokens token1 = new RefreshTokens();
+        token1.setRevokedAt(null);
+
+        RefreshTokens token2 = new RefreshTokens();
+        token2.setRevokedAt(null);
+
+        List<RefreshTokens> tokens = List.of(token1, token2);
+
+        when(refreshTokenRepository.findByUserIdAndRevokedAtIsNull(userId))
+                .thenReturn(tokens);
+
+        when(refreshTokenRepository.saveAll(tokens)).thenReturn(tokens);
+
+        authService.logout(userId);
+
+        verify(refreshTokenRepository).findByUserIdAndRevokedAtIsNull(userId);
+        verify(refreshTokenRepository).saveAll(tokens);
+
+        assertNotNull(token1.getRevokedAt());
+        assertNotNull(token2.getRevokedAt());
+    }
+
+    @Test
+    void logoutWithoutTokens(){
+        UUID userId = UUID.randomUUID();
+
+        List<RefreshTokens> tokensList = List.of();
+
+        when(refreshTokenRepository.findByUserIdAndRevokedAtIsNull(userId))
+                .thenReturn(tokensList);
+
+        when(refreshTokenRepository.saveAll(tokensList))
+                .thenReturn(tokensList);
+
+        authService.logout(userId);
+
+        verify(refreshTokenRepository).findByUserIdAndRevokedAtIsNull(userId);
+        verify(refreshTokenRepository).saveAll(tokensList);
     }
 }
