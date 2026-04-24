@@ -23,7 +23,7 @@ public class EmailServiceTest {
 
 
     @Test
-    void sendEmailSucess(){
+    void shouldSendEmailWhenPasswordResetIsRequestedTest(){
         String forTo = "test@gmail.com";
         String token = "tokenForReset";
 
@@ -33,7 +33,7 @@ public class EmailServiceTest {
     }
 
     @Test
-    void sendEmailError(){
+    void shouldThrowExceptionWhenEmailSendingFailsTest(){
         String forTo ="test@gmail.com";
         String token = "tokenForReset";
 
