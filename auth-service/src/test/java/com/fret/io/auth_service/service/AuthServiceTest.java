@@ -34,7 +34,7 @@ public class AuthServiceTest {
 
 
     @Test
-    void loginSucessTest() {
+    void  shouldReturnTokensWhenLoginIsSuccessfulTest() {
         LoginRequest loginRequest = new LoginRequest();
         loginRequest.setEmail("test@gmail.com");
         loginRequest.setPassword("123456");
@@ -68,7 +68,7 @@ public class AuthServiceTest {
 
 
     @Test
-    void loginWithInvalidCredentialsTest() {
+    void shouldThrowExceptionWhenCredentialsAreInvalidTest() {
         LoginRequest request = new LoginRequest();
         request.setEmail("test@gmail.com");
         request.setPassword("123456");
@@ -90,7 +90,7 @@ public class AuthServiceTest {
     }
 
     @Test
-    void loginGenerateAccessTokenFailTest() {
+    void shouldThrowExceptionWhenAccessTokenGenerationFailsTest() {
         LoginRequest request = new LoginRequest();
         request.setEmail("test@gmail.com");
         request.setPassword("123456");
@@ -120,7 +120,7 @@ public class AuthServiceTest {
     }
 
     @Test
-    void loginGenerateRefreshTokenFailTest() {
+    void shouldThrowExceptionWhenRefreshTokenGenerationFailsTest() {
         LoginRequest loginRequest = new LoginRequest();
         loginRequest.setEmail("test@gmail.com");
         loginRequest.setPassword("123456");
@@ -155,7 +155,7 @@ public class AuthServiceTest {
     }
 
     @Test
-    void logoutSuccess() {
+    void  shouldRevokeAllTokensWhenLogoutIsCalledTest() {
         UUID userId = UUID.randomUUID();
         RefreshTokens token1 = new RefreshTokens();
         token1.setRevokedAt(null);
@@ -180,7 +180,7 @@ public class AuthServiceTest {
     }
 
     @Test
-    void logoutWithoutTokens(){
+    void shouldDoNothingWhenUserHasNoActiveTokensTest(){
         UUID userId = UUID.randomUUID();
 
         List<RefreshTokens> tokensList = List.of();

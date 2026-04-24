@@ -44,7 +44,7 @@ public class UserServiceTest {
     RefreshTokenRepository refreshTokenRepository;
 
     @Test
-    void registerUserWithCpfTest(){
+    void shouldRegisterUserAsMotoristaWhenCpfIsValidTest(){
         RegisterRequest request = new RegisterRequest();
         request.setDocument("123.456.789-01");
         request.setPassword("123456");
@@ -71,7 +71,7 @@ public class UserServiceTest {
     }
 
     @Test
-    void registerUserWithCnpjTest(){
+    void shouldRegisterUserAsEmbarcadoraWhenCnpjIsValidTest(){
         RegisterRequest request = new RegisterRequest();
         request.setDocument("12.345.678/9101-10");
         request.setEmail("test@gmail.com");
@@ -97,7 +97,7 @@ public class UserServiceTest {
     }
 
     @Test
-    void registerUserWithCpfExceptionTest(){
+    void  shouldThrowExceptionWhenCpfIsInvalidTest(){
         RegisterRequest request = new RegisterRequest();
         request.setDocument("12345678901");
         request.setPassword("123456");
@@ -113,7 +113,7 @@ public class UserServiceTest {
     }
 
     @Test
-    void resgisterUserWithCnpjExceptionTest(){
+    void shouldThrowExceptionWhenCnpjIsInvalidTest(){
         RegisterRequest request = new RegisterRequest();
         request.setDocument("12345678901");
         request.setPassword("123456");
@@ -129,7 +129,7 @@ public class UserServiceTest {
     }
 
     @Test
-    void loginSucessTest(){
+    void shouldReturnUserWhenCredentialsAreValidTest(){
         LoginRequest loginRequest = new LoginRequest();
         loginRequest.setEmail("test@gmail.com");
         loginRequest.setPassword("123456");
@@ -154,7 +154,7 @@ public class UserServiceTest {
     }
 
     @Test
-    void loginStatusBlockedOrSuspended(){
+    void  shouldThrowExceptionWhenUserIsBlockedOrSuspendedTest(){
         LoginRequest loginRequest = new LoginRequest();
         loginRequest.setEmail("test@gmail.com");
         loginRequest.setPassword("123456");
@@ -177,7 +177,7 @@ public class UserServiceTest {
     }
 
     @Test
-    void loginWithPasswordInvalidException(){
+    void shouldThrowExceptionWhenPasswordIsInvalidTest(){
         LoginRequest loginRequest = new LoginRequest();
         loginRequest.setEmail("test@gmail.com");
         loginRequest.setPassword("123456");
@@ -203,7 +203,7 @@ public class UserServiceTest {
     }
 
     @Test
-    void changeUserStatusForBlockedOrSuspendedTest(){
+    void shouldUpdateStatusAndRevokeTokensWhenUserIsBlockedOrSuspendedTest(){
         UUID userId = UUID.randomUUID();
 
         User user = new User();
