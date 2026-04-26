@@ -50,7 +50,7 @@ public class AuthServiceTest {
         String refreshToken = "refresh-token";
 
         when(userService.loginUser(loginRequest)).thenReturn(user);
-        when(jwtService.generateToken(user)).thenReturn(accessToken);
+        when(jwtService.generateAccessToken(user)).thenReturn(accessToken);
         when(refreshTokenService.generateRefreshToken(user, "Postman"))
                 .thenReturn(refreshToken);
 
@@ -62,7 +62,7 @@ public class AuthServiceTest {
 
         verify(userService).loginUser(loginRequest);
         verify(refreshTokenRepository).revokeAllByUserId(UUID.fromString(userId));
-        verify(jwtService).generateToken(user);
+        verify(jwtService).generateAccessToken(user);
         verify(refreshTokenService).generateRefreshToken(user, "Postman");
     }
 
@@ -84,7 +84,7 @@ public class AuthServiceTest {
             authService.login(request);
         });
 
-        verify(jwtService, never()).generateToken(any());
+        verify(jwtService, never()).generateAccessToken(any());
         verify(refreshTokenService, never()).generateRefreshToken(any(), any());
         verify(refreshTokenRepository, never()).revokeAllByUserId(any());
     }
@@ -107,7 +107,7 @@ public class AuthServiceTest {
         when(userService.loginUser(request))
                 .thenReturn(user);
 
-        when(jwtService.generateToken(user))
+        when(jwtService.generateAccessToken(user))
                 .thenThrow(new RuntimeException("Error to generate your token"));
 
         assertThrows(RuntimeException.class, () -> {
@@ -137,7 +137,7 @@ public class AuthServiceTest {
         when(userService.loginUser(loginRequest))
                 .thenReturn(user);
 
-        when(jwtService.generateToken(user))
+        when(jwtService.generateAccessToken(user))
                 .thenReturn("access-token");
 
         when(refreshTokenService.generateRefreshToken(user, "Postman"))
@@ -149,7 +149,7 @@ public class AuthServiceTest {
 
         verify(userService).loginUser(loginRequest);
         verify(refreshTokenRepository).revokeAllByUserId(userId);
-        verify(jwtService).generateToken(user);
+        verify(jwtService).generateAccessToken(user);
         verify(refreshTokenService).generateRefreshToken(user, "Postman");
 
     }

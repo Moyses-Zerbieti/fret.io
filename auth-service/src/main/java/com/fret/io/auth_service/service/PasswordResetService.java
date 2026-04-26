@@ -39,7 +39,7 @@ public class PasswordResetService {
             return Base64.getEncoder().encodeToString(hashReset);
 
         } catch (Exception e) {
-            throw new RuntimeException("Erro ao gerar hash");
+            throw new RuntimeException("Erro ao gerar generateHash");
         }
     }
 

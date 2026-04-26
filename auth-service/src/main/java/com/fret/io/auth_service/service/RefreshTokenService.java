@@ -29,21 +29,22 @@ public class RefreshTokenService {
         this.jwtProperties = jwtProperties;
     }
 
-    public String hash(String token){
+    public String generateHash(String token){
         try{
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
             byte[] hashed = digest.digest(token.getBytes(StandardCharsets.UTF_8));
             return Base64.getEncoder().encodeToString(hashed);
 
         } catch (Exception e) {
-            throw new RuntimeException("Erro ao gerar hash", e);
+            throw new RuntimeException("Erro ao gerar generateHash", e);
         }
 
     }
 
-    public String generateRefreshToken(User user, String deviceInfo){
+    public String
+    generateRefreshToken(User user, String deviceInfo){
         String rawToken = UUID.randomUUID().toString();
-        String hash = hash(rawToken);
+        String hash = generateHash(rawToken);
 
         RefreshTokens token = new RefreshTokens();
         token.setUser(user);
@@ -58,7 +59,7 @@ public class RefreshTokenService {
     }
 
     public AuthResponse refresh(String rawToken){
-        String hash = hash(rawToken);
+        String hash = generateHash(rawToken);
         RefreshTokens token = refreshTokenRepository.findByTokenHash(hash);
 
         if (token == null){
@@ -75,9 +76,10 @@ public class RefreshTokenService {
 
         User user = token.getUser();
 
-        String newAcessToken = jwtService.generateToken(user);
+        String newAcessToken = jwtService.generateAccessToken(user);
         String newRefreshToken = generateRefreshToken(user, token.getDeviceInfo());
 
         return new AuthResponse(newAcessToken, newRefreshToken);
     }
+
 }
