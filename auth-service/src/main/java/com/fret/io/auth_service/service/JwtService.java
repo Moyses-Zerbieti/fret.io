@@ -21,7 +21,7 @@ public class JwtService {
         this.jwtEncoder = jwtEncoder;
     }
 
-    public String generateToken(User user){
+    public String generateAccessToken(User user){
         Instant now = Instant.now();
         JwtClaimsSet claims =  JwtClaimsSet.builder()
                 .subject(user.getId().toString())

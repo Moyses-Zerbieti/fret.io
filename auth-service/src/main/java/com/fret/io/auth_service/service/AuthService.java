@@ -35,7 +35,7 @@ public class AuthService {
 
         refreshTokenRepository.revokeAllByUserId(user.getId());
 
-        String acessToken = jwtService.generateToken(user);
+        String acessToken = jwtService.generateAccessToken(user);
         String refreshToken  = refreshTokenService.generateRefreshToken(user, "Postman");
 
         return new AuthResponse(acessToken, refreshToken);

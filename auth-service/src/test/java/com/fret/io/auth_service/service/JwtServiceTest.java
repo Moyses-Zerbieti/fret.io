@@ -47,7 +47,7 @@ public class JwtServiceTest {
         when(jwtEncoder.encode(org.mockito.Mockito.any()))
                 .thenReturn(jwtMock);
 
-        String token = jwtService.generateToken(user);
+        String token = jwtService.generateAccessToken(user);
 
         assertEquals("token", token);
 
