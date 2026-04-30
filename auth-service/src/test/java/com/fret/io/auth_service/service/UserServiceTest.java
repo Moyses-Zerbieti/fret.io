@@ -229,4 +229,27 @@ public class UserServiceTest {
         verify(refreshTokenRepository).revokeAllByUserId(userId);
         verify(eventPublisher).publishUserDeactivated(userId, "BLOCKED");
     }
+
+    @Test
+    void shouldThrowExceptionWhenPublishingEventTest(){
+        UUID userId = UUID.randomUUID();
+
+        RegisterRequest request = new RegisterRequest();
+        request.setEmail("test@gmail.com");
+        request.setDocument("123.456.789-10");
+
+        User usermock = new User();
+        usermock.setId(userId);
+
+        when(userRepository.save(any()))
+                .thenReturn(usermock);
+
+        doThrow(new RuntimeException("Erro ao publicar evento"))
+                .when(eventPublisher)
+                .publishUserRegistered(any());
+
+        User result = userService.registerUser(request);
+
+        assertNotNull(result);
+    }
 }

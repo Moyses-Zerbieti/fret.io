@@ -18,6 +18,10 @@ public class UserRegisteredEvent {
         this.document = document;
     }
 
+    public UserRegisteredEvent() {
+        
+    }
+
     public UUID getIdUser() {
         return idUser;
     }
