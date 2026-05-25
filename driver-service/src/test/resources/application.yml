@@ -11,4 +11,4 @@ spring:
     properties:
       hibernate:
         temp:
-          use_jdbc_metadata_default: false
+          use_jdbc_metadata_defaults: false
