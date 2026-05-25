@@ -1,0 +1,14 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+    username: na
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    database-platform: org.h2.dialect.H2Dialect
+    properties:
+      hibernate:
+        temp:
+          use_jdbc_metadata_default: false
