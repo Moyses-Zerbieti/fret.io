@@ -11,7 +11,7 @@ spring:
     properties:
       hibernate:
         temp:
-          use_jdbc_metadatas_default: false
+          use_jdbc_metadata_default: false
   mail:
     host: localhost
     port: 1025

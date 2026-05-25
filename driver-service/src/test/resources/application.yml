@@ -7,7 +7,7 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create-drop
-    database-platform: org.h2.dialect.H2Dialect
+    database-platform: org.hibernate.dialect.H2Dialect
     properties:
       hibernate:
         temp:
