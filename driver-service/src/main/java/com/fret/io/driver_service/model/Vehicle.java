@@ -35,8 +35,8 @@ public class Vehicle {
     @Column(name = "model", length = 254, nullable = false)
     private String model;
 
-    @Column(name = "year", nullable = false)
-    private Integer year;
+    @Column(name = "vehicle_year", nullable = false)
+    private Integer vehicleYear;
 
     @Column(name = "capacity_kg", precision = 10, scale = 2, nullable = false)
     private BigDecimal capacityKg;
