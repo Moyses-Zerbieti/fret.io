@@ -39,21 +39,96 @@ public class Driver {
     @Column(name = "cnh_expires_at", nullable = false)
     private LocalDate cnhExpiresAt;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "availability", length = 10, nullable = false)
-    private Availability availability;
-
     @Column(name = "avg_rating", precision = 3, scale = 2, nullable = false)
     private BigDecimal avgRating;
 
     @CreatedDate
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @LastModifiedDate
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public UUID getUserId() {
+        return userId;
+    }
+
+    public void setUserId(UUID userId) {
+        this.userId = userId;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public String getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
+    }
+
+    public String getCnhNumber() {
+        return cnhNumber;
+    }
+
+    public void setCnhNumber(String cnhNumber) {
+        this.cnhNumber = cnhNumber;
+    }
+
+    public CnhCategory getCnhCategory() {
+        return cnhCategory;
+    }
+
+    public void setCnhCategory(CnhCategory cnhCategory) {
+        this.cnhCategory = cnhCategory;
+    }
+
+    public LocalDate getCnhExpiresAt() {
+        return cnhExpiresAt;
+    }
+
+    public void setCnhExpiresAt(LocalDate cnhExpiresAt) {
+        this.cnhExpiresAt = cnhExpiresAt;
+    }
+
+    public BigDecimal getAvgRating() {
+        return avgRating;
+    }
+
+    public void setAvgRating(BigDecimal avgRating) {
+        this.avgRating = avgRating;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
 }
