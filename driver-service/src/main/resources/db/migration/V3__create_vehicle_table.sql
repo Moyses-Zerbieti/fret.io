@@ -5,7 +5,7 @@ CREATE TABLE vehicle(
     type_vehicle VARCHAR(254) NOT NULL,
     brand VARCHAR(254) NOT NULL,
     model VARCHAR(254) NOT NULL,
-    year INTEGER NOT NULL,
+    vehicle_year INTEGER NOT NULL,
     capacity_kg NUMERIC(10,2) NOT NULL,
     capacity_m3 NUMERIC(10,3) NOT NULL,
     status_vehicle VARCHAR(254) NOT NULL,
