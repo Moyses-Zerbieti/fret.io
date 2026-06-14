@@ -9,6 +9,6 @@ CREATE TABLE driver_rating(
 
     PRIMARY KEY (id),
 
-    CONSTRAINT fk_driver_id FOREIGN KEY (driver_id) REFERENCES driver(id)
+    CONSTRAINT fk_driver_rating_driver FOREIGN KEY (driver_id) REFERENCES driver(id)
 
 );
