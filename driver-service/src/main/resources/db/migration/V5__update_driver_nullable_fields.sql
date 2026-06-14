@@ -1,0 +1,14 @@
+ALTER TABLE driver
+ALTER COLUMN full_name DROP NOT NULL;
+
+ALTER TABLE driver
+ALTER COLUMN cnh_number DROP NOT NULL;
+
+ALTER TABLE driver
+ALTER COLUMN cnh_category DROP NOT NULL;
+
+ALTER TABLE driver
+ALTER COLUMN cnh_expires_at DROP NOT NULL;
+
+ALTER TABLE driver
+ALTER COLUMN avg_rating DROP NOT NULL;

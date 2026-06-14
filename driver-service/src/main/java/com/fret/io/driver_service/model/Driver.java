@@ -23,23 +23,23 @@ public class Driver {
     @Column(name = "user_id", nullable = false)
     private UUID userId;
 
-    @Column(name = "full_name", length = 255, nullable = false)
+    @Column(name = "full_name", length = 254)
     private String fullName;
 
-    @Column(name = "cpf", length = 18, nullable = false, unique = true)
+    @Column(name = "cpf", length = 18, nullable = false ,unique = true)
     private String cpf;
 
-    @Column(name = "cnh_number", length = 11, nullable = false, unique = true)
+    @Column(name = "cnh_number", length = 11, unique = true)
     private String cnhNumber;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "cnh_category",length = 11, nullable = false)
+    @Column(name = "cnh_category",length = 11)
     private CnhCategory cnhCategory;
 
-    @Column(name = "cnh_expires_at", nullable = false)
+    @Column(name = "cnh_expires_at")
     private LocalDate cnhExpiresAt;
 
-    @Column(name = "avg_rating", precision = 3, scale = 2, nullable = false)
+    @Column(name = "avg_rating", precision = 3, scale = 2)
     private BigDecimal avgRating;
 
     @CreatedDate
