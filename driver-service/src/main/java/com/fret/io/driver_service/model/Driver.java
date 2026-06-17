@@ -20,7 +20,7 @@ public class Driver {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(name = "user_id", nullable = false)
+    @Column(name = "user_id", nullable = false, unique = true)
     private UUID userId;
 
     @Column(name = "full_name", length = 254)
@@ -28,6 +28,12 @@ public class Driver {
 
     @Column(name = "cpf", length = 18, nullable = false ,unique = true)
     private String cpf;
+
+    @Column(name = "email", unique = true, nullable = false, length = 254)
+    private String email;
+
+    @Column(name = "phone_number", length = 11, unique = true)
+    private String phoneNumber;
 
     @Column(name = "cnh_number", length = 11, unique = true)
     private String cnhNumber;
@@ -82,6 +88,22 @@ public class Driver {
 
     public void setCpf(String cpf) {
         this.cpf = cpf;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public String getCnhNumber() {
