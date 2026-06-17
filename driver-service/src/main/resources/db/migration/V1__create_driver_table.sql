@@ -1,8 +1,10 @@
 CREATE TABLE driver(
     id uuid NOT NULL,
     user_id uuid NOT NULL,
-    full_name VARCHAR(255) NOT NULL,
+    full_name VARCHAR(254) NOT NULL,
     cpf VARCHAR(18) NOT NULL,
+    email VARCHAR(254) NOT NULL,
+    phone_number VARCHAR(11) NOT NULL,
     cnh_number VARCHAR(11) NOT NULL,
     cnh_category VARCHAR(11) NOT NULL,
     cnh_expires_at DATE NOT NULL,
@@ -12,5 +14,8 @@ CREATE TABLE driver(
     updated_at TIMESTAMP,
     PRIMARY KEY (id),
     CONSTRAINT uk_driver_cpf UNIQUE (cpf),
-    CONSTRAINT uk_driver_cnh_number UNIQUE (cnh_number)
+    CONSTRAINT uk_driver_cnh_number UNIQUE (cnh_number),
+    CONSTRAINT uk_driver_email UNIQUE (email),
+    CONSTRAINT uk_driver_phone_number UNIQUE (phone_number),
+    CONSTRAINT uk_driver_user_id UNIQUE (user_id)
 );

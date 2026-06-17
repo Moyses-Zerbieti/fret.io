@@ -31,6 +31,7 @@ public class UserRegisteredConsumer {
 
             Driver driver = new Driver();
             driver.setUserId(event.getIdUser());
+            driver.setEmail(event.getEmail());
             driver.setCpf(event.getDocument());
             driver.setAvgRating(BigDecimal.ZERO);
 

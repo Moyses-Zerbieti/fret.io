@@ -2,6 +2,9 @@ ALTER TABLE driver
 ALTER COLUMN full_name DROP NOT NULL;
 
 ALTER TABLE driver
+ALTER COLUMN phone_number DROP NOT NULL;
+
+ALTER TABLE driver
 ALTER COLUMN cnh_number DROP NOT NULL;
 
 ALTER TABLE driver
