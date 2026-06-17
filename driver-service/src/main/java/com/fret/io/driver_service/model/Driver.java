@@ -43,6 +43,7 @@ public class Driver {
     private CnhCategory cnhCategory;
 
     @Column(name = "cnh_expires_at")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate cnhExpiresAt;
 
     @Column(name = "avg_rating", precision = 3, scale = 2)
