@@ -1,6 +1,8 @@
 package com.fret.io.driver_service.service;
 
 import com.fret.io.driver_service.dto.CompleteDriverRegistrationRequest;
+import com.fret.io.driver_service.dto.UpdateDriverNameRequest;
+import com.fret.io.driver_service.dto.UpdateDriverPhoneRequest;
 import com.fret.io.driver_service.exception.DriverNotFoundException;
 import com.fret.io.driver_service.exception.DriverRegistrationAlreadyCompleteException;
 import com.fret.io.driver_service.model.Driver;
@@ -36,6 +38,23 @@ public class DriverService {
 
         driverRepository.save(driver);
     }
+
+    @Transactional
+    public void updateDriverName(UUID userId, UpdateDriverNameRequest request){
+        Driver driver = driverRepository.findByUserId(userId)
+                .orElseThrow(()-> new DriverNotFoundException(userId));
+
+        driver.setFullName(request.getFullName());
+    }
+
+    @Transactional
+    public void updateDriverPhone(UUID userId, UpdateDriverPhoneRequest request){
+        Driver driver = driverRepository.findByUserId(userId)
+                .orElseThrow(()-> new DriverNotFoundException(userId));
+
+        driver.setPhoneNumber(request.getPhoneNumber());
+    }
+
 }
 
 
