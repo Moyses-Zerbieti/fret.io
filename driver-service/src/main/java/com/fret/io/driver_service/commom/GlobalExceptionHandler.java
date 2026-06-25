@@ -2,6 +2,7 @@ package com.fret.io.driver_service.commom;
 
 import com.fret.io.driver_service.exception.DriverNotFoundException;
 import com.fret.io.driver_service.exception.DriverRegistrationAlreadyCompleteException;
+import com.fret.io.driver_service.exception.PlateAlreadyExistsException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -50,11 +51,20 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
     }
 
+    @ExceptionHandler(PlateAlreadyExistsException.class)
+    public ResponseEntity<?>plateAlreadyExistsException(PlateAlreadyExistsException exception){
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "Erro no cadastro do veículo");
+        response.put("error", exception.getMessage());
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+    }
+
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<?> httpMessageNotReadableException(HttpMessageNotReadableException exception){
         Map <String, Object> response = new HashMap<>();
         response.put("message", "Erro de validação");
-        response.put("error", "A categoria da CNH é obrigatória");
+        response.put("error", "Informe todos os dados para efetuar o cadastro");
 
         return ResponseEntity.badRequest().body(response);
     }
