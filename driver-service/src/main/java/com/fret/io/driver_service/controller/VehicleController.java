@@ -1,14 +1,12 @@
 package com.fret.io.driver_service.controller;
 
 import com.fret.io.driver_service.dto.VehicleRequest;
+import com.fret.io.driver_service.dto.VehicleResponse;
 import com.fret.io.driver_service.service.VehicleService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
@@ -23,12 +21,21 @@ public class VehicleController {
 
     @PostMapping("/register/vehicle")
     public ResponseEntity<Void> registerVehicle
-            (@RequestHeader("X-User-id")UUID userId,
+            (@RequestHeader("X-User-Id")UUID userId,
              @Valid @RequestBody VehicleRequest request){
 
         vehicleService.registerVehicle(userId,request);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @GetMapping("/vehicle/{vehicleId}")
+    public ResponseEntity<VehicleResponse> findVehicle
+            (@RequestHeader("X-User-Id") UUID userId,
+             @PathVariable UUID vehicleId){
+        VehicleResponse vehicleFounded = vehicleService.findVehicle(vehicleId, userId);
+
+        return ResponseEntity.status(HttpStatus.OK).body(vehicleFounded);
     }
 
 }
