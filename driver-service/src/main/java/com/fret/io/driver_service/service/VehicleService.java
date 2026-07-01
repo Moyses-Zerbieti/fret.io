@@ -1,8 +1,10 @@
 package com.fret.io.driver_service.service;
 
 import com.fret.io.driver_service.dto.VehicleRequest;
+import com.fret.io.driver_service.dto.VehicleResponse;
 import com.fret.io.driver_service.exception.DriverNotFoundException;
 import com.fret.io.driver_service.exception.PlateAlreadyExistsException;
+import com.fret.io.driver_service.exception.VehicleNotFoundException;
 import com.fret.io.driver_service.model.Driver;
 import com.fret.io.driver_service.model.StatusVehicle;
 import com.fret.io.driver_service.model.Vehicle;
@@ -53,6 +55,29 @@ public class VehicleService {
 
         vehicleRepository.save(vehicle);
 
+    }
+
+    public VehicleResponse findVehicle(UUID vehicleId, UUID userId){
+
+        Driver driver = driverRepository.findByUserId(userId)
+                .orElseThrow(()-> new DriverNotFoundException(userId));
+
+        Vehicle vehicle = vehicleRepository.findByIdAndDriverId_id(vehicleId, driver.getId())
+                .orElseThrow(()-> new VehicleNotFoundException(vehicleId));
+
+        VehicleResponse response = new VehicleResponse();
+        response.setId(vehicle.getId());
+        response.setPlate(vehicle.getPlate());
+        response.setTypeVehicle(vehicle.getTypeVehicle());
+        response.setBrand(vehicle.getBrand());
+        response.setModel(vehicle.getModel());
+        response.setVehicleYear(vehicle.getVehicleYear());
+        response.setCapacityKg(vehicle.getCapacityKg());
+        response.setCapacityM3(vehicle.getCapacityM3());
+        response.setStatusVehicle(vehicle.getStatusVehicle());
+        response.setCreatedAt(vehicle.getCreatedAt());
+
+        return response;
     }
 
 }

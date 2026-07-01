@@ -3,6 +3,7 @@ package com.fret.io.driver_service.commom;
 import com.fret.io.driver_service.exception.DriverNotFoundException;
 import com.fret.io.driver_service.exception.DriverRegistrationAlreadyCompleteException;
 import com.fret.io.driver_service.exception.PlateAlreadyExistsException;
+import com.fret.io.driver_service.exception.VehicleNotFoundException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import javax.xml.parsers.SAXParser;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -67,6 +69,15 @@ public class GlobalExceptionHandler {
         response.put("error", "Informe todos os dados para efetuar o cadastro");
 
         return ResponseEntity.badRequest().body(response);
+    }
+
+    @ExceptionHandler(VehicleNotFoundException.class)
+    public ResponseEntity<?>  vehicleNotFoundException(VehicleNotFoundException exception){
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "Erro na busca de veículo");
+        response.put("error", exception.getMessage());
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
 
 }
