@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -33,9 +34,17 @@ public class VehicleController {
     public ResponseEntity<VehicleResponse> findVehicle
             (@RequestHeader("X-User-Id") UUID userId,
              @PathVariable UUID vehicleId){
-        VehicleResponse vehicleFounded = vehicleService.findVehicle(vehicleId, userId);
+        VehicleResponse vehicleFound = vehicleService.findVehicle(vehicleId, userId);
 
-        return ResponseEntity.status(HttpStatus.OK).body(vehicleFounded);
+        return ResponseEntity.status(HttpStatus.OK).body(vehicleFound);
+    }
+
+    @GetMapping("/vehicles")
+    public ResponseEntity<List<VehicleResponse>> listAllVehicleByDriver
+            (@RequestHeader("X-User-Id") UUID userId){
+        List<VehicleResponse> listVehicles = vehicleService.listAllVehicleByDriver(userId);
+
+        return ResponseEntity.status(HttpStatus.OK).body(listVehicles);
     }
 
 }
