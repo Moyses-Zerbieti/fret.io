@@ -12,6 +12,8 @@ import com.fret.io.driver_service.repository.DriverRepository;
 import com.fret.io.driver_service.repository.VehicleRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -78,6 +80,36 @@ public class VehicleService {
         response.setCreatedAt(vehicle.getCreatedAt());
 
         return response;
+    }
+
+    public List<VehicleResponse> listAllVehicleByDriver(UUID userId){
+        Driver driver = driverRepository.findByUserId(userId)
+                .orElseThrow(()-> new DriverNotFoundException(userId));
+
+        List<Vehicle> listVehicles = vehicleRepository.findAllByDriverId_id(driver.getId());
+
+        List<VehicleResponse> vehicleResponses = new ArrayList<>();
+
+        for (Vehicle vehicleFound : listVehicles){
+
+            VehicleResponse vehicleResponse = new VehicleResponse();
+
+            vehicleResponse.setId(vehicleFound.getId());
+            vehicleResponse.setPlate(vehicleFound.getPlate());
+            vehicleResponse.setTypeVehicle(vehicleFound.getTypeVehicle());
+            vehicleResponse.setBrand(vehicleFound.getBrand());
+            vehicleResponse.setModel(vehicleFound.getModel());
+            vehicleResponse.setVehicleYear(vehicleFound.getVehicleYear());
+            vehicleResponse.setCapacityKg(vehicleFound.getCapacityKg());
+            vehicleResponse.setCapacityM3(vehicleFound.getCapacityM3());
+            vehicleResponse.setStatusVehicle(vehicleFound.getStatusVehicle());
+            vehicleResponse.setCreatedAt(vehicleFound.getCreatedAt());
+
+           vehicleResponses.add(vehicleResponse);
+        }
+
+        return vehicleResponses;
+
     }
 
 }
