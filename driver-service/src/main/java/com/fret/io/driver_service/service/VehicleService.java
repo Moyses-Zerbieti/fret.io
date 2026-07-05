@@ -1,5 +1,6 @@
 package com.fret.io.driver_service.service;
 
+import com.fret.io.driver_service.dto.ChangeStatusVehicleRequest;
 import com.fret.io.driver_service.dto.VehicleRequest;
 import com.fret.io.driver_service.dto.VehicleResponse;
 import com.fret.io.driver_service.exception.DriverNotFoundException;
@@ -110,6 +111,18 @@ public class VehicleService {
 
         return vehicleResponses;
 
+    }
+
+    public void changeStatusVehicle(UUID vehicleId, UUID userId, ChangeStatusVehicleRequest request){
+        Driver driver = driverRepository.findByUserId(userId)
+                .orElseThrow(()-> new DriverNotFoundException(userId));
+
+        Vehicle vehicle = vehicleRepository.findByIdAndDriverId_id(vehicleId, driver.getId())
+                .orElseThrow(()-> new VehicleNotFoundException(vehicleId));
+
+        vehicle.setStatusVehicle(request.getStatusVehicle());
+
+        vehicleRepository.save(vehicle);
     }
 
 }

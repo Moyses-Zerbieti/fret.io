@@ -66,7 +66,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<?> httpMessageNotReadableException(HttpMessageNotReadableException exception){
         Map <String, Object> response = new HashMap<>();
         response.put("message", "Erro de validação");
-        response.put("error", "Informe todos os dados para efetuar o cadastro");
+        response.put("error", "Preencha todos os campos concluir");
 
         return ResponseEntity.badRequest().body(response);
     }

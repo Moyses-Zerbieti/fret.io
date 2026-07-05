@@ -1,5 +1,6 @@
 package com.fret.io.driver_service.controller;
 
+import com.fret.io.driver_service.dto.ChangeStatusVehicleRequest;
 import com.fret.io.driver_service.dto.VehicleRequest;
 import com.fret.io.driver_service.dto.VehicleResponse;
 import com.fret.io.driver_service.service.VehicleService;
@@ -45,6 +46,17 @@ public class VehicleController {
         List<VehicleResponse> listVehicles = vehicleService.listAllVehicleByDriver(userId);
 
         return ResponseEntity.status(HttpStatus.OK).body(listVehicles);
+    }
+
+    @PatchMapping("/vehicle/status/{vehicleId}")
+    public ResponseEntity<Void> changeStatusVehicle
+            (@RequestHeader("X-User-Id") UUID userId,
+             @PathVariable UUID vehicleId,
+             @Valid @RequestBody ChangeStatusVehicleRequest request){
+
+        vehicleService.changeStatusVehicle(vehicleId,userId,request);
+
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
 }
