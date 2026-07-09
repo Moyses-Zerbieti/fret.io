@@ -1,9 +1,6 @@
 package com.fret.io.driver_service.commom;
 
-import com.fret.io.driver_service.exception.DriverNotFoundException;
-import com.fret.io.driver_service.exception.DriverRegistrationAlreadyCompleteException;
-import com.fret.io.driver_service.exception.PlateAlreadyExistsException;
-import com.fret.io.driver_service.exception.VehicleNotFoundException;
+import com.fret.io.driver_service.exception.*;
 import jakarta.validation.ValidationException;
 import org.apache.coyote.Response;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
@@ -89,6 +86,15 @@ public class GlobalExceptionHandler {
         response.put("error", exception.getMessage());
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
+
+    @ExceptionHandler(VehicleNotFoundByPlateException.class)
+    public ResponseEntity<?> vehicleNotFoundByplate(VehicleNotFoundByPlateException exception){
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "Erro na busca de veículo");
+        response.put("error", exception.getMessage());
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
 
 }
