@@ -1,11 +1,11 @@
 package com.fret.io.driver_service.dto;
 
-import jakarta.validation.constraints.NotBlank;
+public class UpdateDriverRequest {
 
-public class UpdateDriverNameRequest {
 
-    @NotBlank(message = "É obrigatório preencher esse campo para concluir")
     private String fullName;
+
+    private  String phone;
 
     public String getFullName() {
         return fullName;
@@ -13,5 +13,13 @@ public class UpdateDriverNameRequest {
 
     public void setFullName(String fullName) {
         this.fullName = fullName;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 }
