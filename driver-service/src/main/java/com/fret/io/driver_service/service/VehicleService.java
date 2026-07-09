@@ -29,10 +29,7 @@ public class VehicleService {
     }
 
     private String normalizePlate(String plate){
-        return plate
-                .replace("-", "")
-                .trim()
-                .toUpperCase();
+        return plate .trim().toUpperCase();
     }
 
     public void registerVehicle(UUID userId, VehicleRequest request){
