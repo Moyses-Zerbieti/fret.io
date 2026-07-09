@@ -3,6 +3,7 @@ package com.fret.io.driver_service.controller;
 import com.fret.io.driver_service.dto.ChangeStatusVehicleRequest;
 import com.fret.io.driver_service.dto.VehicleRequest;
 import com.fret.io.driver_service.dto.VehicleResponse;
+import com.fret.io.driver_service.dto.VehicleResponseByPlate;
 import com.fret.io.driver_service.service.VehicleService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -57,6 +58,16 @@ public class VehicleController {
         vehicleService.changeStatusVehicle(vehicleId,userId,request);
 
         return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @GetMapping("/vehicle/plate/{plate}")
+    public ResponseEntity<VehicleResponseByPlate> findVehicleByPlate
+            (@RequestHeader("X-User-Id")UUID userId,
+             @PathVariable String plate){
+
+        VehicleResponseByPlate response = vehicleService.findVehicleByPlate(plate,userId);
+
+        return ResponseEntity.ok().body(response);
     }
 
 }
