@@ -1,6 +1,7 @@
 package com.fret.io.driver_service.controller;
 
 import com.fret.io.driver_service.dto.CompleteDriverRegistrationRequest;
+import com.fret.io.driver_service.dto.DriverResponse;
 import com.fret.io.driver_service.dto.UpdateDriverRequest;
 import com.fret.io.driver_service.service.DriverService;
 import jakarta.validation.Valid;
@@ -36,5 +37,15 @@ public class DriverController {
         driverService.updateDriver(userId, request);
 
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/{cpf}")
+    public ResponseEntity<DriverResponse> findDriver
+            (@RequestHeader("X-User-Id") UUID userId,
+             @PathVariable String cpf){
+
+        DriverResponse response = driverService.findDriver(cpf, userId);
+
+        return ResponseEntity.ok(response);
     }
 }

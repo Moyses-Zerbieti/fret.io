@@ -1,6 +1,7 @@
 package com.fret.io.driver_service.service;
 
 import com.fret.io.driver_service.dto.CompleteDriverRegistrationRequest;
+import com.fret.io.driver_service.dto.DriverResponse;
 import com.fret.io.driver_service.dto.UpdateDriverRequest;
 import com.fret.io.driver_service.exception.DriverNotFoundException;
 import com.fret.io.driver_service.exception.DriverRegistrationAlreadyCompleteException;
@@ -54,6 +55,24 @@ public class DriverService {
         if (!StringUtils.hasText(request.getFullName()) && !StringUtils.hasText(request.getPhone())) {
             throw new ValidationException("Informe ao menos um campo para atualização dos dados");
         }
+    }
+
+    public DriverResponse findDriver (String cpf, UUID userId){
+        Driver driver = driverRepository.findByCpfAndUserId(cpf, userId)
+                .orElseThrow(()-> new DriverNotFoundException(userId));
+
+        DriverResponse response = new DriverResponse();
+
+        response.setFullName(driver.getFullName());
+        response.setCpf(driver.getCpf());
+        response.setEmail(driver.getEmail());
+        response.setPhoneNumber(driver.getPhoneNumber());
+        response.setCnhNumber(driver.getCnhNumber());
+        response.setCnhCategory(driver.getCnhCategory());
+        response.setCnhExpiresAt(driver.getCnhExpiresAt());
+        response.setAvgRating(driver.getAvgRating());
+
+        return response;
     }
 }
 
