@@ -3,11 +3,18 @@ package com.fret.io.driver_service.dto;
 import com.fret.io.driver_service.model.TypeVehicle;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 
 import java.math.BigDecimal;
 
 public class VehicleRequest {
 
+    @Pattern(
+            regexp = "^[A-Za-z]{3}-\\d{4}^[A-Za-z]{3}\\d[A-Za-z]\\d{2}$",
+            message = "Informe uma placa válida"
+    )
+    @Size(min = 7, max = 8)
     @NotBlank(message = "Informe a placa do veículo para efetuar o cadastro")
     private String plate;
 
