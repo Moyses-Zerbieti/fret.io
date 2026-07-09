@@ -1,14 +1,15 @@
 package com.fret.io.driver_service.service;
 
 import com.fret.io.driver_service.dto.CompleteDriverRegistrationRequest;
-import com.fret.io.driver_service.dto.UpdateDriverNameRequest;
-import com.fret.io.driver_service.dto.UpdateDriverPhoneRequest;
+import com.fret.io.driver_service.dto.UpdateDriverRequest;
 import com.fret.io.driver_service.exception.DriverNotFoundException;
 import com.fret.io.driver_service.exception.DriverRegistrationAlreadyCompleteException;
 import com.fret.io.driver_service.model.Driver;
 import com.fret.io.driver_service.repository.DriverRepository;
+import jakarta.validation.ValidationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.UUID;
 
@@ -40,21 +41,20 @@ public class DriverService {
     }
 
     @Transactional
-    public void updateDriverName(UUID userId, UpdateDriverNameRequest request){
+    public void updateDriver(UUID userId, UpdateDriverRequest request){
         Driver driver = driverRepository.findByUserId(userId)
                 .orElseThrow(()-> new DriverNotFoundException(userId));
 
-        driver.setFullName(request.getFullName());
+        if (StringUtils.hasText(request.getFullName())){
+            driver.setFullName(request.getFullName().trim());
+        }
+        if (StringUtils.hasText(request.getPhone())) {
+            driver.setPhoneNumber(request.getPhone().trim());
+        }
+        if (!StringUtils.hasText(request.getFullName()) && !StringUtils.hasText(request.getPhone())) {
+            throw new ValidationException("Informe ao menos um campo para atualização dos dados");
+        }
     }
-
-    @Transactional
-    public void updateDriverPhone(UUID userId, UpdateDriverPhoneRequest request){
-        Driver driver = driverRepository.findByUserId(userId)
-                .orElseThrow(()-> new DriverNotFoundException(userId));
-
-        driver.setPhoneNumber(request.getPhoneNumber());
-    }
-
 }
 
 
