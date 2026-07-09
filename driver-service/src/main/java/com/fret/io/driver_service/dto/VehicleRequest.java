@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 public class VehicleRequest {
 
     @Pattern(
-            regexp = "^[A-Za-z]{3}-\\d{4}^[A-Za-z]{3}\\d[A-Za-z]\\d{2}$",
+            regexp =  "^[A-Z]{3}-?(\\d{4}|\\d[A-Z]\\d{2})$",
             message = "Informe uma placa válida"
     )
     @Size(min = 7, max = 8)
