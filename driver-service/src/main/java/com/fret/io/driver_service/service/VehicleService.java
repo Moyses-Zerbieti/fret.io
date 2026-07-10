@@ -31,10 +31,7 @@ public class VehicleService {
     }
 
     private String normalizePlate(String plate){
-        return plate
-                .replace("-", "")
-                .trim()
-                .toUpperCase();
+        return plate.trim().toUpperCase();
     }
 
     public void registerVehicle(UUID userId, VehicleRequest request){
@@ -128,11 +125,15 @@ public class VehicleService {
     }
 
     public VehicleResponseByPlate findVehicleByPlate(String plate, UUID userId){
+
+       plate = normalizePlate(plate);
+
         Driver driver = driverRepository.findByUserId(userId)
                 .orElseThrow(()-> new DriverNotFoundException(userId));
 
+        String finalPlate = plate;
         Vehicle vehicle = vehicleRepository.findByPlateAndDriverId_Id(plate,driver.getId())
-                .orElseThrow(()->new VehicleNotFoundByPlateException(plate));
+                .orElseThrow(()->new VehicleNotFoundByPlateException(finalPlate));
 
         VehicleResponseByPlate response = new VehicleResponseByPlate();
 
