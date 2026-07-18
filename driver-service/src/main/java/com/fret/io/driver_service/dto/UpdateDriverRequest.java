@@ -5,7 +5,9 @@ public class UpdateDriverRequest {
 
     private String fullName;
 
-    private  String phone;
+    private String phone;
+
+    private String cnhNumber;
 
     public String getFullName() {
         return fullName;
@@ -21,5 +23,13 @@ public class UpdateDriverRequest {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public String getCnhNumber() {
+        return cnhNumber;
+    }
+
+    public void setCnhNumber(String cnhNumber) {
+        this.cnhNumber = cnhNumber;
     }
 }

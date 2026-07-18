@@ -10,4 +10,5 @@ public interface DriverRepository extends JpaRepository<Driver, UUID> {
 
     Optional<Driver> findByUserId(UUID userId);
     Optional<Driver>findByCpfAndUserId(String cpf, UUID userId);
+    Optional<Driver>findByCnhNumber(String cnhNumber);
 }
