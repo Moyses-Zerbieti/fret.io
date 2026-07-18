@@ -1,6 +1,6 @@
 package com.fret.io.driver_service.controller;
 
-import com.fret.io.driver_service.dto.ChangeStatusVehicleRequest;
+import com.fret.io.driver_service.dto.UpdateStatusVehicleRequest;
 import com.fret.io.driver_service.dto.VehicleRequest;
 import com.fret.io.driver_service.dto.VehicleResponse;
 import com.fret.io.driver_service.dto.VehicleResponseByPlate;
@@ -53,7 +53,7 @@ public class VehicleController {
     public ResponseEntity<Void> changeStatusVehicle
             (@RequestHeader("X-User-Id") UUID userId,
              @PathVariable UUID vehicleId,
-             @Valid @RequestBody ChangeStatusVehicleRequest request){
+             @Valid @RequestBody UpdateStatusVehicleRequest request){
 
         vehicleService.changeStatusVehicle(vehicleId,userId,request);
 

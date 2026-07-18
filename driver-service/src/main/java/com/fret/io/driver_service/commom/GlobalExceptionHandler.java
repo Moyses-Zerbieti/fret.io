@@ -2,7 +2,6 @@ package com.fret.io.driver_service.commom;
 
 import com.fret.io.driver_service.exception.*;
 import jakarta.validation.ValidationException;
-import org.apache.coyote.Response;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +10,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import javax.xml.parsers.SAXParser;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -95,6 +93,15 @@ public class GlobalExceptionHandler {
         response.put("error", exception.getMessage());
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    }
+
+    @ExceptionHandler(CnhAlreadyRegisteredException.class)
+    public ResponseEntity<?> cnhAlreadyRegistrationException(CnhAlreadyRegisteredException exception){
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "Erro de validação");
+        response.put("error", exception.getMessage());
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
     }
 
 }

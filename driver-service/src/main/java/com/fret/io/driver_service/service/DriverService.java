@@ -1,5 +1,7 @@
 package com.fret.io.driver_service.service;
 
+import com.fret.io.driver_service.exception.CnhAlreadyRegisteredException;
+import com.fret.io.driver_service.validation.CnhValidator;
 import com.fret.io.driver_service.dto.CompleteDriverRegistrationRequest;
 import com.fret.io.driver_service.dto.DriverResponse;
 import com.fret.io.driver_service.dto.UpdateDriverRequest;
@@ -32,9 +34,10 @@ public class DriverService {
         if (driver.getCnhNumber() != null){
             throw new DriverRegistrationAlreadyCompleteException();
         }
+
         driver.setFullName(request.getFullName());
         driver.setPhoneNumber(request.getPhoneNumber());
-        driver.setCnhNumber(request.getCnhNumber());
+        driver.setCnhNumber(CnhValidator.validateAndNormalize(request.getCnhNumber()));
         driver.setCnhCategory(request.getCnhCategory());
         driver.setCnhExpiresAt(request.getCnhExpiresAt());
 
@@ -46,14 +49,26 @@ public class DriverService {
         Driver driver = driverRepository.findByUserId(userId)
                 .orElseThrow(()-> new DriverNotFoundException(userId));
 
+        if (!StringUtils.hasText(request.getFullName())
+                && !StringUtils.hasText(request.getPhone())
+                && !StringUtils.hasText(request.getCnhNumber())) {
+            throw new ValidationException("Informe ao menos um campo para atualização dos dados");
+        }
         if (StringUtils.hasText(request.getFullName())){
             driver.setFullName(request.getFullName().trim());
         }
         if (StringUtils.hasText(request.getPhone())) {
             driver.setPhoneNumber(request.getPhone().trim());
         }
-        if (!StringUtils.hasText(request.getFullName()) && !StringUtils.hasText(request.getPhone())) {
-            throw new ValidationException("Informe ao menos um campo para atualização dos dados");
+        if (StringUtils.hasText(request.getCnhNumber())){
+
+            String cnh = CnhValidator.validateAndNormalize(request.getCnhNumber());
+            driverRepository.findByCnhNumber(cnh)
+                    .filter(found -> !found.getId().equals(driver.getId()))
+                    .ifPresent(found -> {
+                        throw new CnhAlreadyRegisteredException();
+                    });
+        driver.setCnhNumber(cnh);
         }
     }
 
