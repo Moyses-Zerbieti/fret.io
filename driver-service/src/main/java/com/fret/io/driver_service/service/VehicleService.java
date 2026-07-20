@@ -32,7 +32,6 @@ public class VehicleService {
 
     private String normalizePlate(String plate){
         return plate
-                .replace("-", "")
                 .trim()
                 .toUpperCase();
     }
