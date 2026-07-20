@@ -1,7 +1,7 @@
 package com.fret.io.driver_service.service;
 
 import com.fret.io.driver_service.exception.CnhAlreadyRegisteredException;
-import com.fret.io.driver_service.validation.CnhValidator;
+import com.fret.io.driver_service.validation.validator.CnhValidator;
 import com.fret.io.driver_service.dto.CompleteDriverRegistrationRequest;
 import com.fret.io.driver_service.dto.DriverResponse;
 import com.fret.io.driver_service.dto.UpdateDriverRequest;

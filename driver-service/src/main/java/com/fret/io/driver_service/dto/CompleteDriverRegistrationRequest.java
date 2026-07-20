@@ -1,6 +1,7 @@
 package com.fret.io.driver_service.dto;
 
 import com.fret.io.driver_service.model.CnhCategory;
+import com.fret.io.driver_service.validation.annotation.ValidPhoneNumber;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -12,6 +13,7 @@ public class CompleteDriverRegistrationRequest {
     private String fullName;
 
     @NotBlank(message = "O telefone é obrigatório")
+    @ValidPhoneNumber
     private String phoneNumber;
 
     @NotBlank(message = "O número da CNH é obrigatório")
