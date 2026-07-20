@@ -22,7 +22,7 @@ public class Vehicle {
     @JoinColumn(name = "driver_id", nullable = false)
     private Driver driverId;
 
-    @Column(name = "plate", length = 7, nullable = false, unique = true)
+    @Column(name = "plate", length = 8, nullable = false, unique = true)
     private String plate;
 
     @Enumerated(EnumType.STRING)

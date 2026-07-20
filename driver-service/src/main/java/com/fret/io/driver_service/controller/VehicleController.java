@@ -32,15 +32,6 @@ public class VehicleController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @GetMapping("/vehicle/{vehicleId}")
-    public ResponseEntity<VehicleResponse> findVehicle
-            (@RequestHeader("X-User-Id") UUID userId,
-             @PathVariable UUID vehicleId){
-        VehicleResponse vehicleFound = vehicleService.findVehicle(vehicleId, userId);
-
-        return ResponseEntity.status(HttpStatus.OK).body(vehicleFound);
-    }
-
     @GetMapping("/vehicles")
     public ResponseEntity<List<VehicleResponse>> listAllVehicleByDriver
             (@RequestHeader("X-User-Id") UUID userId){
