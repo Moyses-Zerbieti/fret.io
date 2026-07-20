@@ -32,7 +32,7 @@ public class DriverController {
     @PatchMapping("/update")
     public ResponseEntity<Void> changeNameDriver
             (@RequestHeader("X-User-Id") UUID userId,
-             @RequestBody UpdateDriverRequest request){
+             @Valid @RequestBody UpdateDriverRequest request){
 
         driverService.updateDriver(userId, request);
 

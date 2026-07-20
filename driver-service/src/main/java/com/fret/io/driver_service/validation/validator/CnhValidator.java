@@ -1,4 +1,4 @@
-package com.fret.io.driver_service.validation;
+package com.fret.io.driver_service.validation.validator;
 
 import jakarta.validation.ValidationException;
 import org.springframework.util.StringUtils;

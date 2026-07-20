@@ -32,7 +32,7 @@ public class Driver {
     @Column(name = "email", unique = true, nullable = false, length = 254)
     private String email;
 
-    @Column(name = "phone_number", length = 11, unique = true)
+    @Column(name = "phone_number", length = 20, unique = true)
     private String phoneNumber;
 
     @Column(name = "cnh_number", length = 11, unique = true)

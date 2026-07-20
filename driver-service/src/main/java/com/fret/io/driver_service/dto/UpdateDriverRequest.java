@@ -1,10 +1,13 @@
 package com.fret.io.driver_service.dto;
 
+import com.fret.io.driver_service.validation.annotation.ValidPhoneNumber;
+
 public class UpdateDriverRequest {
 
 
     private String fullName;
 
+    @ValidPhoneNumber
     private String phone;
 
     private String cnhNumber;
