@@ -58,30 +58,6 @@ public class VehicleService {
         vehicle.setStatusVehicle(StatusVehicle.DISPONIVEL);
 
         vehicleRepository.save(vehicle);
-
-    }
-
-    public VehicleResponse findVehicle(UUID vehicleId, UUID userId){
-
-        Driver driver = driverRepository.findByUserId(userId)
-                .orElseThrow(()-> new DriverNotFoundException(userId));
-
-        Vehicle vehicle = vehicleRepository.findByIdAndDriverId_id(vehicleId, driver.getId())
-                .orElseThrow(()-> new VehicleNotFoundException(vehicleId));
-
-        VehicleResponse response = new VehicleResponse();
-        response.setId(vehicle.getId());
-        response.setPlate(vehicle.getPlate());
-        response.setTypeVehicle(vehicle.getTypeVehicle());
-        response.setBrand(vehicle.getBrand());
-        response.setModel(vehicle.getModel());
-        response.setVehicleYear(vehicle.getVehicleYear());
-        response.setCapacityKg(vehicle.getCapacityKg());
-        response.setCapacityM3(vehicle.getCapacityM3());
-        response.setStatusVehicle(vehicle.getStatusVehicle());
-        response.setCreatedAt(vehicle.getCreatedAt());
-
-        return response;
     }
 
     public List<VehicleResponse> listAllVehicleByDriver(UUID userId){
