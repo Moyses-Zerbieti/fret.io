@@ -13,7 +13,9 @@ import com.fret.io.driver_service.model.StatusVehicle;
 import com.fret.io.driver_service.model.Vehicle;
 import com.fret.io.driver_service.repository.DriverRepository;
 import com.fret.io.driver_service.repository.VehicleRepository;
+import com.fret.io.driver_service.validation.validator.PlateValidator;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,25 +32,20 @@ public class VehicleService {
         this.driverRepository = driverRepository;
     }
 
-    private String normalizePlate(String plate){
-        return plate
-                .trim()
-                .toUpperCase();
-    }
-
+    @Transactional
     public void registerVehicle(UUID userId, VehicleRequest request){
         Driver driver = driverRepository.findByUserId(userId)
                 .orElseThrow(()-> new DriverNotFoundException(userId));
 
-        String plate = normalizePlate(request.getPlate());
+        String normalizedPlate = PlateValidator.validateAndNormalize(request.getPlate());
 
-        if(vehicleRepository.existsByPlate(plate)){
+        if(vehicleRepository.existsByPlate(normalizedPlate)){
             throw new PlateAlreadyExistsException();
         }
 
         Vehicle vehicle = new Vehicle();
         vehicle.setDriverId(driver);
-        vehicle.setPlate(plate);
+        vehicle.setPlate(normalizedPlate);
         vehicle.setTypeVehicle(request.getTypeVehicle());
         vehicle.setBrand(request.getBrand());
         vehicle.setModel(request.getModel());
@@ -90,7 +87,8 @@ public class VehicleService {
 
     }
 
-    public void changeStatusVehicle(UUID vehicleId, UUID userId, UpdateStatusVehicleRequest request){
+    @Transactional
+    public void UpdateStatusVehicle(UUID vehicleId, UUID userId, UpdateStatusVehicleRequest request){
         Driver driver = driverRepository.findByUserId(userId)
                 .orElseThrow(()-> new DriverNotFoundException(userId));
 
@@ -106,8 +104,10 @@ public class VehicleService {
         Driver driver = driverRepository.findByUserId(userId)
                 .orElseThrow(()-> new DriverNotFoundException(userId));
 
-        Vehicle vehicle = vehicleRepository.findByPlateAndDriverId_Id(plate,driver.getId())
-                .orElseThrow(()->new VehicleNotFoundByPlateException(plate));
+        String normalizedPlate = PlateValidator.validateAndNormalize(plate);
+
+        Vehicle vehicle = vehicleRepository.findByPlateAndDriverId_Id(normalizedPlate,driver.getId())
+                .orElseThrow(()->new VehicleNotFoundByPlateException(normalizedPlate));
 
         VehicleResponseByPlate response = new VehicleResponseByPlate();
 

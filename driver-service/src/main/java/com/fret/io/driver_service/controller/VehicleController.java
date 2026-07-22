@@ -46,7 +46,7 @@ public class VehicleController {
              @PathVariable UUID vehicleId,
              @Valid @RequestBody UpdateStatusVehicleRequest request){
 
-        vehicleService.changeStatusVehicle(vehicleId,userId,request);
+        vehicleService.UpdateStatusVehicle(vehicleId,userId,request);
 
         return ResponseEntity.status(HttpStatus.OK).build();
     }
