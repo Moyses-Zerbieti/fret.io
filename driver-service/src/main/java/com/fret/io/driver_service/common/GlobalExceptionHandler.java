@@ -1,4 +1,4 @@
-package com.fret.io.driver_service.commom;
+package com.fret.io.driver_service.common;
 
 import com.fret.io.driver_service.exception.*;
 import jakarta.validation.ValidationException;
