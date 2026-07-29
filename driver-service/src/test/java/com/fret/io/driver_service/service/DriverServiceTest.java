@@ -1,6 +1,7 @@
 package com.fret.io.driver_service.service;
 
 import com.fret.io.driver_service.dto.CompleteDriverRegistrationRequest;
+import com.fret.io.driver_service.dto.DriverResponse;
 import com.fret.io.driver_service.dto.UpdateDriverRequest;
 import com.fret.io.driver_service.exception.CnhAlreadyRegisteredException;
 import com.fret.io.driver_service.exception.DriverNotFoundException;
@@ -21,6 +22,7 @@ import java.time.LocalDate;
 import java.util.Optional;
 import java.util.UUID;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -195,4 +197,41 @@ public class DriverServiceTest {
 
     }
 
+    @Test
+    void shouldFindDriverByCpf(){
+        Driver driver = createUserDriver();
+        driver.setCpf("12345678901");
+
+        when(repository.findByCpfAndUserId(driver.getCpf(), driver.getUserId()))
+                .thenReturn(Optional.of(driver));
+
+        DriverResponse response = driverService.findDriver(driver.getCpf(), driver.getUserId());
+
+        assertThat(response).isNotNull();
+        assertThat(response.getFullName()).isEqualTo(driver.getFullName());
+        assertThat(response.getCpf()).isEqualTo(driver.getCpf());
+        assertThat(response.getEmail()).isEqualTo(driver.getEmail());
+        assertThat(response.getPhoneNumber()).isEqualTo(driver.getPhoneNumber());
+        assertThat(response.getCnhNumber()).isEqualTo(driver.getCnhNumber());
+        assertThat(response.getCnhCategory()).isEqualTo(driver.getCnhCategory());
+        assertThat(response.getCnhExpiresAt()).isEqualTo(driver.getCnhExpiresAt());
+        assertThat(response.getAvgRating()).isEqualTo(driver.getAvgRating());
+
+        verify(repository).findByCpfAndUserId(driver.getCpf(), driver.getUserId());
+    }
+
+    @Test
+    void shouldThrowDriverNotFoundExceptionWhenDriverNotExists(){
+        Driver driver = createUserDriver();
+
+        when(repository.findByCpfAndUserId(driver.getCpf(), driver.getUserId()))
+                .thenReturn(Optional.empty());
+
+        assertThrows(DriverNotFoundException.class, ()->{
+            driverService.findDriver(driver.getCpf(), driver.getUserId());
+        });
+
+        verify(repository).findByCpfAndUserId(driver.getCpf(), driver.getUserId());
+
+    }
 }
