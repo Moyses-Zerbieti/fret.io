@@ -84,7 +84,6 @@ public class VehicleService {
         }
 
         return vehicleResponses;
-
     }
 
     @Transactional
