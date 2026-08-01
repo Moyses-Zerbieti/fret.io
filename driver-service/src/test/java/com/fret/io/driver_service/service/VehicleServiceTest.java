@@ -1,6 +1,7 @@
 package com.fret.io.driver_service.service;
 
 import com.fret.io.driver_service.dto.VehicleRequest;
+import com.fret.io.driver_service.dto.VehicleResponse;
 import com.fret.io.driver_service.exception.DriverNotFoundException;
 import com.fret.io.driver_service.exception.PlateAlreadyExistsException;
 import com.fret.io.driver_service.model.Driver;
@@ -19,9 +20,10 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
-import java.util.Optional;
-import java.util.UUID;
+import java.time.LocalDateTime;
+import java.util.*;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
@@ -58,6 +60,24 @@ public class VehicleServiceTest {
         request.setCapacityM3(new BigDecimal(20));
 
         return request;
+    }
+
+    private Vehicle createVehicle(Driver driver){
+        Vehicle vehicle = new Vehicle();
+
+        vehicle.setId(UUID.randomUUID());
+        vehicle.setDriverId(driver);
+        vehicle.setPlate("ABC1234");
+        vehicle.setTypeVehicle(TypeVehicle.VAN);
+        vehicle.setBrand("Mercedes");
+        vehicle.setModel("Sprinter");
+        vehicle.setVehicleYear(2022);
+        vehicle.setCapacityKg(BigDecimal.valueOf(1500));
+        vehicle.setCapacityM3(BigDecimal.valueOf(12.5));
+        vehicle.setStatusVehicle(StatusVehicle.DISPONIVEL);
+        vehicle.setCreatedAt(LocalDateTime.now());
+
+        return vehicle;
     }
 
     @Test
@@ -136,4 +156,57 @@ public class VehicleServiceTest {
         verify(vehicleRepository, never()).save(Mockito.any());
     }
 
+    @Test
+    void shouldReturnAllVehiclesByDriverUserIdTest(){
+        Driver driver = createUserDriver();
+
+        when(driverRepository.findByUserId(driver.getUserId()))
+                .thenReturn(Optional.of(driver));
+
+        Vehicle vehicle = createVehicle(driver);
+
+        when(vehicleRepository.findAllByDriverId_id(driver.getId()))
+                .thenReturn(List.of(vehicle));
+
+        List<VehicleResponse> responses = service.listAllVehicleByDriver(driver.getUserId());
+
+        verify(driverRepository).findByUserId(driver.getUserId());
+        verify(vehicleRepository).findAllByDriverId_id(driver.getId());
+
+        assertThat(responses).isNotNull();
+    }
+
+    @Test
+    void shouldThrowDriverNotFoundExceptionWhenSearchAllVehicleByDriverTest(){
+        Driver driver = createUserDriver();
+
+        when(driverRepository.findByUserId(driver.getUserId()))
+                .thenReturn(Optional.empty());
+
+        assertThrows(DriverNotFoundException.class, ()->{
+            service.listAllVehicleByDriver(driver.getUserId());
+        });
+
+        verify(driverRepository).findByUserId(driver.getUserId());
+        verify(vehicleRepository, never()).findAllByDriverId_id(Mockito.any());
+    }
+
+    @Test
+    void shouldReturnEmptyListWhenDriverHasNoVehiclesTest(){
+        Driver driver = createUserDriver();
+
+        when(driverRepository.findByUserId(driver.getUserId()))
+                .thenReturn(Optional.of(driver));
+
+        when(vehicleRepository.findAllByDriverId_id(driver.getId()))
+                .thenReturn(Collections.emptyList());
+
+        List<VehicleResponse> responses =
+        service.listAllVehicleByDriver(driver.getUserId());
+
+        verify(driverRepository).findByUserId(driver.getUserId());
+        verify(vehicleRepository).findAllByDriverId_id(driver.getId());
+
+        assertThat(responses).isNotNull();
+    }
 }
