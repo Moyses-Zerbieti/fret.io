@@ -1,9 +1,11 @@
 package com.fret.io.driver_service.service;
 
+import com.fret.io.driver_service.dto.UpdateStatusVehicleRequest;
 import com.fret.io.driver_service.dto.VehicleRequest;
 import com.fret.io.driver_service.dto.VehicleResponse;
 import com.fret.io.driver_service.exception.DriverNotFoundException;
 import com.fret.io.driver_service.exception.PlateAlreadyExistsException;
+import com.fret.io.driver_service.exception.VehicleNotFoundException;
 import com.fret.io.driver_service.model.Driver;
 import com.fret.io.driver_service.model.StatusVehicle;
 import com.fret.io.driver_service.model.TypeVehicle;
@@ -208,5 +210,74 @@ public class VehicleServiceTest {
         verify(vehicleRepository).findAllByDriverId_id(driver.getId());
 
         assertThat(responses).isNotNull();
+    }
+
+    @Test
+    void shouldUpdateStatusVehicleTest(){
+        Driver driver = createUserDriver();
+
+        when(driverRepository.findByUserId(driver.getUserId()))
+                .thenReturn(Optional.of(driver));
+
+        Vehicle vehicle = createVehicle(driver);
+
+        when(vehicleRepository.findByIdAndDriverId_id(vehicle.getId(), driver.getId()))
+                .thenReturn(Optional.of(vehicle));
+
+        UpdateStatusVehicleRequest request = new UpdateStatusVehicleRequest();
+        request.setStatusVehicle(StatusVehicle.INATIVO);
+
+        service.UpdateStatusVehicle(vehicle.getId(), driver.getUserId(),request);
+
+        verify(driverRepository).findByUserId(driver.getUserId());
+        verify(vehicleRepository).findByIdAndDriverId_id(vehicle.getId(), driver.getId());
+        verify(vehicleRepository).save(vehicle);
+
+        assertEquals(StatusVehicle.INATIVO, vehicle.getStatusVehicle());
+    }
+
+    @Test
+    void shouldThrowDriverNotFoundExceptionWhenDriverHasNoExistsTest(){
+        Driver driver = createUserDriver();
+
+        when(driverRepository.findByUserId(driver.getUserId()))
+                .thenReturn(Optional.empty());
+
+        Vehicle vehicle = new Vehicle();
+
+        UpdateStatusVehicleRequest request = new UpdateStatusVehicleRequest();
+
+        assertThrows(DriverNotFoundException.class, ()->{
+            service.UpdateStatusVehicle(vehicle.getId(), driver.getUserId(), request);
+        });
+
+        verify(driverRepository).findByUserId(driver.getUserId());
+        verify(vehicleRepository, never()).findByIdAndDriverId_id(Mockito.any(), Mockito.any());
+        verify(vehicleRepository, never()).save(Mockito.any());
+    }
+
+    @Test
+    void shouldThrowVehicleNotFoundExceptionTest(){
+        Driver driver = createUserDriver();
+
+        when(driverRepository.findByUserId(driver.getUserId()))
+                .thenReturn(Optional.of(driver));
+
+        Vehicle vehicle = createVehicle(driver);
+
+        UpdateStatusVehicleRequest request = new UpdateStatusVehicleRequest();
+        request.setStatusVehicle(StatusVehicle.EM_MANUTENCAO);
+
+        when(vehicleRepository.findByIdAndDriverId_id(vehicle.getId(), driver.getId()))
+                .thenReturn(Optional.empty());
+
+
+        assertThrows(VehicleNotFoundException.class, ()->{
+            service.UpdateStatusVehicle(vehicle.getId(), driver.getUserId(), request);
+        });
+
+        verify(driverRepository).findByUserId(driver.getUserId());
+        verify(vehicleRepository).findByIdAndDriverId_id(vehicle.getId(), driver.getId());
+        verify(vehicleRepository, never()).save(Mockito.any());
     }
 }
