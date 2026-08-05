@@ -3,8 +3,10 @@ package com.fret.io.driver_service.service;
 import com.fret.io.driver_service.dto.UpdateStatusVehicleRequest;
 import com.fret.io.driver_service.dto.VehicleRequest;
 import com.fret.io.driver_service.dto.VehicleResponse;
+import com.fret.io.driver_service.dto.VehicleResponseByPlate;
 import com.fret.io.driver_service.exception.DriverNotFoundException;
 import com.fret.io.driver_service.exception.PlateAlreadyExistsException;
+import com.fret.io.driver_service.exception.VehicleNotFoundByPlateException;
 import com.fret.io.driver_service.exception.VehicleNotFoundException;
 import com.fret.io.driver_service.model.Driver;
 import com.fret.io.driver_service.model.StatusVehicle;
@@ -279,5 +281,76 @@ public class VehicleServiceTest {
         verify(driverRepository).findByUserId(driver.getUserId());
         verify(vehicleRepository).findByIdAndDriverId_id(vehicle.getId(), driver.getId());
         verify(vehicleRepository, never()).save(Mockito.any());
+    }
+
+    @Test
+    void shouldReturnVehicleByPlateTest(){
+        Driver driver = createUserDriver();
+
+        when(driverRepository.findByUserId(driver.getUserId()))
+                .thenReturn(Optional.of(driver));
+
+        Vehicle vehicle = createVehicle(driver);
+
+        String normalizedPlate = PlateValidator.validateAndNormalize(vehicle.getPlate());
+
+        when(vehicleRepository.findByPlateAndDriverId_Id(normalizedPlate, driver.getId()))
+                .thenReturn(Optional.of(vehicle));
+
+        VehicleResponseByPlate response = service.findVehicleByPlate(normalizedPlate, driver.getUserId());
+
+        verify(driverRepository).findByUserId(driver.getUserId());
+        verify(vehicleRepository).findByPlateAndDriverId_Id(normalizedPlate, driver.getId());
+
+        assertThat(response).isNotNull();
+        assertEquals(normalizedPlate, response.getPlate());
+        assertEquals(vehicle.getTypeVehicle(), response.getTypeVehicle());
+        assertEquals(vehicle.getBrand(), response.getBrand());
+        assertEquals(vehicle.getModel(), response.getModel());
+        assertEquals(vehicle.getVehicleYear(), response.getVehicleYear());
+        assertEquals(vehicle.getCapacityKg(), response.getCapacityKg());
+        assertEquals( vehicle.getCapacityM3(), response.getCapacityM3());
+        assertEquals(vehicle.getStatusVehicle(), response.getStatusVehicle());
+    }
+
+    @Test
+    void shouldReturnDriverNotFoundExceptionWhenDriverNotExistTest(){
+        Driver driver = createUserDriver();
+
+        when(driverRepository.findByUserId(driver.getUserId()))
+                .thenReturn(Optional.empty());
+
+        Vehicle vehicle = createVehicle(driver);
+
+        String normalizedPlate = PlateValidator.validateAndNormalize(vehicle.getPlate());
+
+        assertThrows(DriverNotFoundException.class, ()->{
+            service.findVehicleByPlate(normalizedPlate,driver.getUserId());
+        });
+
+        verify(driverRepository).findByUserId(driver.getUserId());
+        verify(vehicleRepository, never()).findByPlateAndDriverId_Id(normalizedPlate,driver.getId());
+    }
+
+    @Test
+    void shouldThrowVehicleNotFoundByPlateExceptionTest(){
+        Driver driver = createUserDriver();
+
+        when(driverRepository.findByUserId(driver.getUserId()))
+                .thenReturn(Optional.of(driver));
+
+        Vehicle vehicle = createVehicle(driver);
+
+        String normalizedPlate = PlateValidator.validateAndNormalize(vehicle.getPlate());
+
+        when(vehicleRepository.findByPlateAndDriverId_Id(normalizedPlate, driver.getId()))
+                .thenReturn(Optional.empty());
+
+        assertThrows(VehicleNotFoundByPlateException.class, ()->{
+            service.findVehicleByPlate(normalizedPlate, driver.getUserId());
+        });
+
+        verify(driverRepository).findByUserId(driver.getUserId());
+        verify(vehicleRepository).findByPlateAndDriverId_Id(normalizedPlate, driver.getId());
     }
 }
