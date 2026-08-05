@@ -13,7 +13,6 @@ public class UserRegisteredConsumer {
 
     private final DriverRepository driverRepository;
 
-
     public UserRegisteredConsumer(DriverRepository driverRepository) {
         this.driverRepository = driverRepository;
     }
@@ -39,7 +38,7 @@ public class UserRegisteredConsumer {
 
         }catch (Exception e){
             System.err.println(
-                    "Erro ao processar user.registered" + e.getMessage()
+                    "Erro ao processar user.registered " + e.getMessage()
             );
         }
     }
